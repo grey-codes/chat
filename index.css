@@ -1,0 +1,202 @@
+ 
+ html {
+   background-color: #111;
+ }
+ 
+::-webkit-scrollbar {
+  width: 0.5vw;  /* Remove scrollbar space */
+  background: transparent;  /* Optional: just make scrollbar invisible */
+}
+/* Optional: show position indicator in red */
+::-webkit-scrollbar-thumb {
+    background: #FF0080;
+}
+
+ * {
+    font-family: Roboto, Arial, sans-serif;
+    color: #fff;
+ }
+  
+  /* Full-width inputs */
+  input[type=text], input[type=password], textarea {
+    width: 100%;
+    padding: 1.5rem 2.5rem;
+    margin: 1rem 0;
+    display: inline-block;
+    border:none;
+    border-bottom: 0.2rem solid;
+    border-bottom-color: #FF0080;
+    box-sizing: border-box;
+    background-color: #333;
+    box-shadow: 0 0 5px rgba(0,0,0,0);
+    transition: box-shadow 0.3s ease-in-out;
+  }
+  input[type=text]:focus, input[type=password]:focus, textarea:focus {
+    box-shadow: 0 0 5px #FF0080;
+    transition: box-shadow 0.2s ease-in-out;
+  }
+  /*
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill,
+  textarea:-webkit-autofill:hover,
+  textarea:-webkit-autofill:focus,
+  select:-webkit-autofill,
+  select:-webkit-autofill:hover,
+  select:-webkit-autofill:focus {
+    border: 1px solid black !important;
+    background-color: transparent !important;
+  }
+    */
+  
+  /* Set a style for all buttons */
+  input[type=button],  input[type=submit] {
+    background-color: #FF0080;
+    margin: 1rem 0;
+    padding: 1.5rem 2.5rem;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  input[type=button]:disabled,  input[type=submit]:disabled {
+    background-color: #333;
+  }
+
+  /* Add a hover effect for buttons */
+  button:hover {
+    opacity: 0.8;
+  }
+  
+  .header-title {
+      padding: 0.5rem;
+      background-color: #FF0080;
+      color: #000;
+      text-align:center;
+  }
+  
+  .header-inner {
+      padding: 0.5rem;
+      font-size: 0.5rem;
+      text-align: right;
+      background-color: #222;
+  }
+  
+  .footer {
+      padding: 0.5rem;
+      font-size: 0.5rem;
+      text-align: right;
+      background-color: #222;
+  }
+  
+  /* style the chat panels */
+
+  div {
+    padding: 0.5rem;
+  }
+
+  .outerContainer {
+    width: 100%;
+    padding: 0px;
+    overflow: hidden;
+  }
+
+  .container {
+    margin: 0 auto;
+    width: 80vw;
+    overflow: hidden;
+  }
+
+  .chatRootPanel {
+    display: flex;
+  }
+
+  .channelBar .addButton {
+    border-bottom: none;
+    border: none;
+    margin: 0rem;
+  }
+
+  .channelBar .addButton span:hover {
+    color: #aaa;
+    transition: color 0.1s ease-in-out;
+  }
+
+  .chatRootPanel .channelBar {
+    width: 30%;
+    border: #333 solid 1px;
+    overflow-y: auto;
+    scrollbar-color: #FF0080 rgba(0,0,0,0);
+    scrollbar-width: thin;
+  }
+
+  .chatRootPanel .chatPanel {
+    width: 70%;
+    border: #333 solid 1px;
+    justify-content: center;
+  }
+
+  .chatPanel .messagePanel {
+    height:54vh;
+    border: #333 solid 1px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-color: #FF0080 rgba(0,0,0,0);
+    scrollbar-width: thin;
+  }
+
+  .chatPanel .typePanel {
+    border: #333 solid 1px;
+    margin-top: 1vh;
+  }
+  
+  .chatPanel .textRow {
+    word-wrap: normal;
+    overflow-wrap: break-word;
+    border-bottom: #333 dashed 1px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .chatPanel .textRow.last {
+    border-bottom: none;
+  }
+
+  .chatPanel .textRow .author {
+    font-size: 1.1rem;
+    vertical-align: bottom;
+  }
+  .chatPanel .textRow .author::after {
+    content: ": ";
+  }
+
+  .chatPanel .textRow .message {
+    font-size: 0.8rem;
+    vertical-align: bottom;
+  }
+
+  .chatPanel .typePanel {
+    display:flex;
+    overflow:hidden;
+  }
+
+  .typePanel textarea {
+    width:100%;
+    height:10vh;
+    padding: 0;
+    margin: 0.5rem;
+  }
+
+  .typePanel input[type=button] {
+    width:10vw;
+    height:10vh;
+    margin: 0.5rem;
+  }
+  
+  /* Change styles for span and cancel button on extra small screens */
+  @media screen and (min-aspect-ratio: 120/80) {
+    .container {
+        width: 120vh;
+    }
+  } 
