@@ -31,6 +31,7 @@ function channelAddClick() {
         $("#messages").attr("channel_id",$(this).attr("channel_id"));
         fetchMessages(true);
     });
+    $(".channelBar .textRow").last().unbind();
     $("#addChannel").click(function() {
         let channelName=prompt("Enter the channel name:");
         let perm = prompt("Enter the three-digit octal permission.","777");
@@ -155,8 +156,8 @@ function fetchChannels() {
             response.forEach( chan => {
                 chas.append(formChannel(chan))
             });
-            channelAddClick();
             chas.append(addChannelHTML);
+            channelAddClick();
         }
       });
 }

@@ -45,9 +45,24 @@ function getPermissionContext($user, $object) {
     global $PERM_EXECUTE;
     $permAr = getOctets($object->unixperm);
     $isOwned = false;
+    $isGroup = false;
 
     if (!is_null($user)) {
         $isOwned = (($object->owner_id)==($user->user_id));
+        $usrRole = getUserRoleByID($user->user_id);
+        $ownRole = getUserRoleByID($object->owner_id);
+        if (!is_null($usrRole) && !is_null($ownRole)) {
+            if ($usrRole->privilege > $ownRole->privilege) {
+                $p = new Perm();
+                $p->r = true;
+                $p->w = true;
+                $p->x = true;
+            
+                return $p;
+            } elseif ($usrRole->role_id == $ownRole->role_id) {
+                $isGroup = true;
+            }
+        }
     }
 
     $canRead = true;
@@ -58,6 +73,10 @@ function getPermissionContext($user, $object) {
         $canRead = $canRead && ( ($permAr[0] & $PERM_READ) == $PERM_READ);
         $canWrite = $canWrite && ( ($permAr[0] & $PERM_WRITE) == $PERM_WRITE);
         $canExecute = $canExecute && ( ($permAr[0] & $PERM_EXECUTE) == $PERM_EXECUTE);
+    } elseif ($isGroup) {
+        $canRead = $canRead && ( ($permAr[1] & $PERM_READ) == $PERM_READ);
+        $canWrite = $canWrite && ( ($permAr[1] & $PERM_WRITE) == $PERM_WRITE);
+        $canExecute = $canExecute && ( ($permAr[1] & $PERM_EXECUTE) == $PERM_EXECUTE);
     } else {
         $canRead = $canRead && ( ($permAr[2] & $PERM_READ) == $PERM_READ);
         $canWrite = $canWrite && ( ($permAr[2] & $PERM_WRITE) == $PERM_WRITE);  
@@ -81,6 +100,7 @@ function getPermissionContext($user, $object) {
 
 $usrByNameQuery = "SELECT * FROM " . $usrtb . " WHERE user_name = ?";
 $usrByIDQuery = "SELECT * FROM " . $usrtb . " WHERE user_id = ?";
+$usrRoleByIDQuery = "SELECT " . $usrtb . ".*, roles.* FROM " . $usrtb . " LEFT JOIN user_roles ON user_roles.user_id=" . $usrtb . ".user_id LEFT JOIN roles ON roles.role_id=user_roles.role_id WHERE users.user_id = ?";
 $chaByIDQuery = "SELECT * FROM " . $chatb . " WHERE channel_id = ?";
 $chaByNameQuery = "SELECT * FROM " . $chatb . " WHERE name = ?";
 $usrRegisterQuery = "INSERT INTO " . $usrtb . " (user_id, user_name, pass_hash) VALUES (NULL, ?, ?)";
@@ -89,11 +109,21 @@ $chaAddQuery = "INSERT INTO " . $chatb . " (channel_id, name, owner_id, unixperm
 
 $getUserByNameStatement = $conn->prepare($usrByNameQuery);
 $getUserByIDStatement = $conn->prepare($usrByIDQuery);
+$usrRoleByIDStatement = $conn->prepare($usrRoleByIDQuery);
 $getChannelByIDStatement = $conn->prepare($chaByIDQuery);
 $getChannelByNameStatement = $conn->prepare($chaByNameQuery);
 $usrRegisterStatement = $conn->prepare($usrRegisterQuery);
 $msgSendStatement = $conn->prepare($msgSendQuery);
 $chaAddStatement = $conn->prepare($chaAddQuery);
+
+function getUserRoleByID($uid) {
+    global $usrRoleByIDStatement;
+    $usrRoleByIDStatement->bind_param("i", $uid);
+    $usrRoleByIDStatement->execute();
+    $result = $usrRoleByIDStatement->get_result();
+    $user = $result->fetch_object();
+    return $user;
+}
 
 function getUserByID($uid) {
     global $getUserByIDStatement;

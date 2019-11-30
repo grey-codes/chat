@@ -15,6 +15,10 @@ if (isset($_POST["offset"])) {
     $msgOffset = $_POST["offset"];
 }
 
+if (!isset($_POST["channel_id"])) {
+    die("No channel id!");
+}
+ 
 $chid = $_POST["channel_id"];
 if (is_null($chid)) { 
     die(json_encode(array()));
