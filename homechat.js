@@ -1,5 +1,6 @@
 UPDATE_TIME_MS=5000;
 var tid = setTimeout(refresh, UPDATE_TIME_MS);
+var messages = [];
 
 var addChannelHTML = `
 <div class="textRow addButton">
@@ -10,14 +11,14 @@ var addChannelHTML = `
 `;
 
 function refresh() {
-    fetchMessages();
+    fetchMessages(false);
     tid = setTimeout(refresh, UPDATE_TIME_MS);
 }
 
 function channelAddClick() {
     $(".channelBar .textRow").click(function() {
         $("#messages").attr("channel_id",$(this).attr("channel_id"));
-        fetchMessages();
+        fetchMessages(true);
     });
     $("#addChannel").click(function() {
         let channelName=prompt("Enter the channel name:");
@@ -34,23 +35,75 @@ function channelAddClick() {
     })
 }
 
-function fetchMessages() {
+function formMessage(m) {
+    let html = "<div class=\"textRow\">";
+    html+="<span class=\"author\">" + m.user_name + "</span>&nbsp;<span class=\"message\">" + m.value + "</span>";
+    html+="</div>";
+    return html;
+}
+
+function fetchMessages(purge) {
     let msgs=$("#messages");
     let chid=msgs.attr("channel_id");
     let oldHTML=$("#messages").html();
+    if (purge) {
+        messages = [];
+        messageOffset = 0;
+        msgs.html("");
+    }
     if (chid==null || chid==-1) {
         return;
     } else {
         $.ajax({
             type: "POST",
             url: "fetch_messages.php",
-            data: {channel_id: chid},
+            data: {channel_id: chid, offset: messageOffset},
+            dataType: "json",
             cache: false,
             success: function(response) {
+                if (messages.length > 0 ) {
+                    var ids = new Set(messages.map(msg => msg.msg_id));
+                    messages = [...messages, ...response.filter(msg => !ids.has(msg.msg_id))];
+                } else {
+                    messages = response;
+                }
+                messages.sort((a,b) => {
+                    let comp = 0;
+                    if (a.msg_id < b.msg_id) {
+                        comp = -1;
+                    } else if (a.msg_id > b.msg_id) {
+                        comp = 1;
+                    }
+                    return comp;
+                });
+                let prepend=-1;
+                let i=0;
+                for (i=0; i<messages.length;i++) {
+                    m=messages[i];
+                    if (m.domObject!=null) {
+                        prepend = i;
+                        break;
+                    }
+                };
+                for (i=prepend-1; i>=0; i--) {
+                    m=messages[i];
+                    m.domObject = msgs.prepend(formMessage(m));
+                }
+                messages.forEach((m,index,arr) => {
+                    if (m.domObject==null) {
+                        m.domObject = msgs.append(formMessage(m));
+                    } else {
+                        prepend = false;
+                    }
+                });
+                /*
                 $( "#messages" ).html(response).ready(function(){
-                if (oldHTML!=$("#messages").html()) {
+                msgs = $('messages'); // your parent ul element
+                msgs.children().each(function(i,msgEl){msgs.prepend(msgEl)})
+                if (oldHTML!=$("#messages").html() && messageOffset==0) {
                     $("#messages").animate({ scrollTop: $('#messages').prop("scrollHeight")}, 1000);
                 }});
+                */
             }
           });
     }
@@ -69,6 +122,7 @@ function fetchChannels() {
 }
 
 function sendMessage() {
+    messageOffset = 0;
     let msg = $("#msgbox").val();
     $("#msgbox").val("");
     let msgs=$("#messages");
@@ -105,4 +159,9 @@ $(document).ready(function() {
     });
 
     fetchChannels();
+
+    /*
+    $("#messages").scroll(function() {
+        if ( $("#messages").scrollTop() == 0 && $("#messages").prop("scrollHeight")
+    })*/
 });
