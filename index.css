@@ -51,13 +51,17 @@
     */
   
   /* Set a style for all buttons */
-  input[type=button],  input[type=submit] {
+  input[type=button], input[type=submit] {
     background-color: #FF0080;
-    margin: 1rem 0;
-    padding: 1.5rem 2.5rem;
     border: none;
     cursor: pointer;
     width: 100%;
+  }
+
+  /* Set a style for form buttons */
+  form input[type=button],  form input[type=submit] {
+    margin: 1rem 0;
+    padding: 1.5rem 2.5rem;
   }
 
   input[type=button]:disabled,  input[type=submit]:disabled {
@@ -138,7 +142,7 @@
   }
 
   .chatPanel .messagePanel {
-    height:54vh;
+    height:59vh;
     border: #333 solid 1px;
     overflow-y: auto;
     overflow-x: hidden;
@@ -151,7 +155,7 @@
     margin-top: 1vh;
   }
   
-  .chatPanel .textRow {
+  .textRow {
     word-wrap: normal;
     overflow-wrap: break-word;
     border-bottom: #333 dashed 1px;
@@ -161,6 +165,7 @@
 
   .chatPanel .textRow.last {
     border-bottom: none;
+    padding-bottom: 0px;
   }
 
   .chatPanel .textRow .author {
@@ -183,17 +188,21 @@
 
   .typePanel textarea {
     width:100%;
-    height:10vh;
+    height:4vh;
     padding: 0;
     margin: 0.5rem;
   }
 
   .typePanel input[type=button] {
     width:10vw;
-    height:10vh;
+    height:4vh;
     margin: 0.5rem;
   }
-  
+
+  textarea {
+    resize: none; 
+  }
+
   /* Change styles for span and cancel button on extra small screens */
   @media screen and (min-aspect-ratio: 120/80) {
     .container {

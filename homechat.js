@@ -101,6 +101,9 @@ function writeMessages(messageContainer) {
             prepend = false;
         }
     });
+    let children = messageContainer.children();
+    children.removeClass("last");
+    children.last().addClass("last");
 }
 
 function fetchMessages(purge, off) {
