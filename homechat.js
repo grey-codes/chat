@@ -47,9 +47,10 @@ function channelAddClick() {
 }
 
 function formMessage(m) {
-    let html = "<div class=\"textRow\">";
-    html+="<span class=\"author\">" + m.user_name + "</span>&nbsp;<span class=\"message\">" + m.value + "</span>";
-    html+="</div>";
+    let html = `
+    <div class="textRow">
+    <span class="author">${m.user_name}</span>&nbsp;<span class="message">${m.value}</span>
+    </div>`;
     return html;
 }
 
