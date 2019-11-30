@@ -59,7 +59,15 @@ if (isset($fileName)) {
     if ($didUpload) {
         chmod($imgPathAbs,0660);
         $sz = getimagesize($imgPathAbs);
-        $msg="<img src=\"" . $imgPath .  "\" width=\"" . $sz[0] . "px\" height=\"" . $sz[1] . "px\"></img>";
+        $msg="<p><img src=\"" . $imgPath .  "\" width=\"" . $sz[0] . "px\" height=\"" . $sz[1] . "px\"></img></p>";
+        
+        if (isset($_POST["message"])) {
+            $Parsedown = new Parsedown();
+            $Parsedown->setSafeMode(true);
+            $msg_markdown=$Parsedown->text($_POST["message"]);
+            $msg = $msg . $msg_markdown;
+        }
+
         sendMessage($owner_id,$chid_safe,$msg);
     }
 }

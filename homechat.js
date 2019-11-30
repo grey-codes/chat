@@ -184,6 +184,8 @@ function sendMessage() {
 }
 
 function uploadFile() {
+    let msg = $("#msgbox").val();
+    $("#msgbox").val("");
     let messages=$("#messages");
     let files = $("#fileUpload")[0].files[0]; 
     let chid=messages.attr("channel_id");
@@ -193,6 +195,7 @@ function uploadFile() {
         var fd = new FormData(); 
         fd.append("channel_id",chid);
         fd.append("myfile", files);
+        fd.append("message", msg);
         $.ajax({
             type: "POST",
             url: "send_file.php",
