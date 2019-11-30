@@ -155,8 +155,8 @@ function fetchChannels() {
             response.forEach( chan => {
                 chas.append(formChannel(chan))
             });
-            chas.append(addChannelHTML);
             channelAddClick();
+            chas.append(addChannelHTML);
         }
       });
 }
