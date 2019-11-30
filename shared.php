@@ -16,6 +16,9 @@ $dbname = 'asda';
 $dbpass = 'asda';
 */
 
+$PREFIX_UPLOADS="uploads/";
+$PREFIX_THUMBNAILS="thumbs/";
+
 $usrtb="users";
 $chatb="channels";
 $msgtb="messages";

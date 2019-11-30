@@ -119,7 +119,12 @@ function writeMessages(messageContainer) {
     children.last().addClass("last");
     children.find("img").unbind();
     children.find("img").click(e=> {
-        makeModal("<img class=\"popout\" src=\"" + e.target.src + "\"></img>")
+        let src = e.target.src;
+        let fullSrc = e.target.getAttribute("fullSrc");
+        if (fullSrc!=null && fullSrc!="") {
+            src=fullSrc;
+        }
+        makeModal("<img class=\"popout\" src=\"" + src + "\"></img>")
     });
 }
 

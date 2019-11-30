@@ -1,5 +1,6 @@
 <?php
 include("shared.php");
+include("simpleimg.php");
 
 if (!logged_in()) {
     die("<span>You must be logged in!</span>");
@@ -51,16 +52,24 @@ if (isset($fileName)) {
     if (!in_array($fileExt,$fileExtensions)) {
         die("This process does not support this file type.");
     }
-    $imgPath="uploads/" . $owner_id . "/" . $fileHash . "." . $fileExt;
+    $imgPath=$PREFIX_UPLOADS . $owner_id . "/" . $fileHash . "." . $fileExt;
+    $thumbPath=$PREFIX_THUMBNAILS . $owner_id . "/" . $fileHash . ".jpg";
     $imgPathAbs=getcwd() . "/" . $imgPath;
+    $thumbPathAbs=getcwd() . "/" . $thumbPath;
     $pathParts = pathinfo($imgPathAbs);
     $dirToMake=$pathParts["dirname"]."/";
     if (!file_exists($dirToMake)) {
         mkdir($dirToMake,0770,true);
     }
+    $pathParts = pathinfo($thumbPathAbs);
+    $thumbsDir=$pathParts["dirname"]."/";
+    if (!file_exists($thumbsDir)) {
+        mkdir($thumbsDir,0770,true);
+    }
     $didUpload = move_uploaded_file($fileTmpName, $imgPathAbs);
     if ($didUpload) {
         chmod($imgPathAbs,0660);
+
         $sz = getimagesize($imgPathAbs);
         if ($sz[0]>$PREVIEW_WIDTH) {
             $rat = $sz[1]/$sz[0];
@@ -72,7 +81,13 @@ if (isset($fileName)) {
             $sz[1]=$PREVIEW_HEIGHT;
             $sz[0]=$sz[1]*$rat;
         }
-        $msg="<p><img src=\"" . $imgPath .  "\" width=\"" . $sz[0] . "px\" height=\"" . $sz[1] . "px\"></img></p>";
+
+        $image = new SimpleImage();
+        $image->load($imgPathAbs);
+        $image->resize($sz[0], $sz[1]);
+        $image->save($thumbPathAbs);
+
+        $msg="<p><img src=\"" . $thumbPath .  "\" fullSrc=\"" . $imgPath . "\" width=\"" . $sz[0] . "px\" height=\"" . $sz[1] . "px\"></img></p>";
         
         if (isset($_POST["message"])) {
             $Parsedown = new Parsedown();
