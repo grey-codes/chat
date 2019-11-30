@@ -183,6 +183,32 @@ function sendMessage() {
     }
 }
 
+function uploadFile() {
+    let messages=$("#messages");
+    let files = $("#fileUpload")[0].files[0]; 
+    let chid=messages.attr("channel_id");
+    if (chid==null || chid==-1) {
+        return;
+    } else {
+        var fd = new FormData(); 
+        fd.append("channel_id",chid);
+        fd.append("myfile", files);
+        $.ajax({
+            type: "POST",
+            url: "send_file.php",
+            data: fd,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                console.log(response);
+                clearTimeout(tid);
+                messages.scrollTop(messages.prop("scrollHeight"));
+                refresh();
+            }
+        });
+    }
+}
+
 var shiftHeld=false;
 $(document).on('keyup keydown', function(e){shiftHeld = e.shiftKey} );
 
@@ -209,4 +235,15 @@ $(document).ready(function() {
             messages.scrollTop(5);
         }
     })
+
+    $("#uploadBtn").click(e=>{
+        $("#fileUpload").click();
+    });
+
+    $("#fileUpload").on('change', function() {
+        if ($("#fileUpload").val()!="") {
+            uploadFile();
+            $("#fileUpload").val("");
+        }
+    });
 });

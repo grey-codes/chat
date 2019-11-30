@@ -25,7 +25,9 @@ $sessUser = getUserByID($user_id);
     </div>
     <div class="typePanel">
       <textarea id="msgbox"></textarea>
+      <input type="button" id="uploadBtn" class="uploadButton" value="+"/>
       <input type="button" id="send" value="Send"/>
+      <input type="file" id="fileUpload" style="display: none;" />
     </div>
   </div>
 </div>
