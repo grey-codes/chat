@@ -23,3 +23,22 @@ CREATE TABLE IF NOT EXISTS messages (
   FOREIGN KEY (channel_id) REFERENCES channels(channel_id) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY (owner_id) REFERENCES users(user_id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=INNODB;
+
+CREATE TABLE IF NOT EXISTS roles (
+  role_id int NOT NULL AUTO_INCREMENT,
+  channel_id int NOT NULL,
+  role_name VARCHAR(50),
+  permission_json TEXT,
+  privilege int NOT NULL,
+  PRIMARY KEY (role_id, channel_id),
+  FOREIGN KEY (channel_id) REFERENCES channels(channel_id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=INNODB;
+
+CREATE TABLE IF NOT EXISTS user_roles (
+  user_id int NOT NULL,
+  channel_id int NOT NULL,
+  role_id int NOT NULL,
+  PRIMARY KEY (user_id, channel_id),
+  FOREIGN KEY (channel_id) REFERENCES channels(channel_id) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (role_id) REFERENCES roles(role_id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=INNODB;
