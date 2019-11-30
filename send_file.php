@@ -37,6 +37,9 @@ $fileSize = $_FILES['myfile']['size'];
 $fileTmpName  = $_FILES['myfile']['tmp_name'];
 $fileType = $_FILES['myfile']['type'];
 
+$PREVIEW_WIDTH=500;
+$PREVIEW_HEIGHT=500;
+
 $chid_safe=$cha->channel_id;
 $owner_id=$sessUser->user_id;
 
@@ -59,6 +62,16 @@ if (isset($fileName)) {
     if ($didUpload) {
         chmod($imgPathAbs,0660);
         $sz = getimagesize($imgPathAbs);
+        if ($sz[0]>$PREVIEW_WIDTH) {
+            $rat = $sz[1]/$sz[0];
+            $sz[0]=$PREVIEW_WIDTH;
+            $sz[1]=$sz[0]*$rat;
+        }
+        if ($sz[1]>$PREVIEW_HEIGHT) {
+            $rat = $sz[0]/$sz[1];
+            $sz[1]=$PREVIEW_HEIGHT;
+            $sz[0]=$sz[1]*$rat;
+        }
         $msg="<p><img src=\"" . $imgPath .  "\" width=\"" . $sz[0] . "px\" height=\"" . $sz[1] . "px\"></img></p>";
         
         if (isset($_POST["message"])) {
