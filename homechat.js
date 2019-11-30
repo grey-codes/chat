@@ -54,6 +54,14 @@ function formMessage(m) {
     return html;
 }
 
+function formChannel(c) {
+    let html = `
+    <div class="textRow" channel_id="${c.channel_id}" >
+    <span class="channelName">${c.name}</span>
+    </div>`;
+    return html;
+}
+
 function addMessages(msgAr) {
     if (messageAr.length > 0 ) {
         var ids = new Set(messageAr.map(msg => msg.msg_id));
@@ -137,8 +145,14 @@ function fetchChannels() {
         type: "POST",
         url: "fetch_channels.php",
         cache: false,
+        dataType: "json",
         success: function(response) {
-            $( "#channels" ).html(response+addChannelHTML);
+            let chas=$( "#channels" );
+            chas.html("");
+            response.forEach( chan => {
+                chas.append(formChannel(chan))
+            });
+            chas.append(addChannelHTML);
             channelAddClick();
         }
       });

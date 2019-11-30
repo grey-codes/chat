@@ -2,7 +2,7 @@
 include("shared.php");
 
 if (!logged_in()) {
-    die("<span>You must be logged in!</span>");
+    die(json_encode(array()));
 }
 
 $userID = $_SESSION['user_id'];
@@ -17,17 +17,17 @@ if (isset($_POST["offset"])) {
 
 $chid = $_POST["channel_id"];
 if (is_null($chid)) { 
-    die("<span>No channel ID given.</span>");
+    die(json_encode(array()));
 }
 
 $cha=getChannelByID($chid);
 if (is_null($cha)) { 
-    die("<span>Invalid channel ID.</span>");
+    die(json_encode(array()));
 }
 
 $rwx = getPermissionContext($sessUser, $cha); //get our permissions for it
 if (!($rwx->r)) { //if we can't read it, fail
-    die("<span>No permissions.</span>");
+    die(json_encode(array()));
 }
 
 $msgQuery = "SELECT * FROM (SELECT msg_id, user_name, value FROM messages INNER JOIN users ON messages.owner_id=users.user_id WHERE messages.channel_id=? ORDER BY msg_id DESC LIMIT ? OFFSET ? ) AS msgT ORDER BY msg_id ASC";
