@@ -11,6 +11,18 @@ var addChannelHTML = `
 </div>
 `;
 
+function removeModal() {
+    let modal = $(".modal").last();
+    modal.remove();
+}
+
+function makeModal(code) {
+    $("html").append("<div class=\"modal\"></div>");
+    let modal = $(".modal").last();
+    modal.click(removeModal);
+    modal.append(code);
+}
+
 function refresh() {
     let messages = $("#messages");
     let atBottom = ((messages.prop("scrollHeight")-messages.height()-messages.scrollTop())<32);
@@ -105,6 +117,10 @@ function writeMessages(messageContainer) {
     let children = messageContainer.children();
     children.removeClass("last");
     children.last().addClass("last");
+    children.find("img").unbind();
+    children.find("img").click(e=> {
+        makeModal("<img class=\"popout\" src=\"" + e.target.src + "\"></img>")
+    });
 }
 
 function fetchMessages(purge, off) {
