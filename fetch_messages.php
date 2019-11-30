@@ -58,9 +58,7 @@ if ( (!is_null($result)) && $result->num_rows > 0) { //for each channel
         echo("</div>");
     }
     */
-    echo(json_encode($msgAr));
-} else {
-    echo("<div class=\"textRow\">No messages.</div>");
 }
 
+echo(json_encode($msgAr));
 ?>

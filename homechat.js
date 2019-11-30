@@ -1,6 +1,7 @@
 UPDATE_TIME_MS=5000;
 var tid = setTimeout(refresh, UPDATE_TIME_MS);
-var messages = [];
+var messageAr = [];
+const MESSAGE_QUERY_MAX=25;
 
 var addChannelHTML = `
 <div class="textRow addButton">
@@ -11,7 +12,17 @@ var addChannelHTML = `
 `;
 
 function refresh() {
-    fetchMessages(false);
+    let messages = $("#messages");
+    let atBottom = ((messages.prop("scrollHeight")-messages.height()-messages.scrollTop())<32);
+    fetchMessages();
+    tid = setTimeout(refresh, UPDATE_TIME_MS);
+    if (atBottom) {
+        messages.animate({ scrollTop: messages.prop("scrollHeight")}, 1000);
+    }
+}
+
+function refreshTimer() {
+    clearTimeout(tid);
     tid = setTimeout(refresh, UPDATE_TIME_MS);
 }
 
@@ -42,14 +53,55 @@ function formMessage(m) {
     return html;
 }
 
-function fetchMessages(purge) {
-    let msgs=$("#messages");
-    let chid=msgs.attr("channel_id");
+function addMessages(msgAr) {
+    if (messageAr.length > 0 ) {
+        var ids = new Set(messageAr.map(msg => msg.msg_id));
+        messageAr = [...messageAr, ...msgAr.filter(msg => !ids.has(msg.msg_id))];
+    } else {
+        messageAr = msgAr;
+    }
+    messageAr.sort((a,b) => {
+        let comp = 0;
+        if (a.msg_id < b.msg_id) {
+            comp = -1;
+        } else if (a.msg_id > b.msg_id) {
+            comp = 1;
+        }
+        return comp;
+    });
+}
+
+function writeMessages(messageContainer) {
+    let prepend=-1;
+    let i=0;
+    for (i=0; i<messageAr.length;i++) {
+        m=messageAr[i];
+        if (m.domObject!=null) {
+            prepend = i;
+            break;
+        }
+    };
+    for (i=prepend-1; i>=0; i--) {
+        m=messageAr[i];
+        m.domObject = messageContainer.prepend(formMessage(m));
+    }
+    messageAr.forEach((m,index,arr) => {
+        if (m.domObject==null) {
+            m.domObject = messageContainer.append(formMessage(m));
+        } else {
+            prepend = false;
+        }
+    });
+}
+
+function fetchMessages(purge, off) {
+    let messages=$("#messages");
+    let chid=messages.attr("channel_id");
     let oldHTML=$("#messages").html();
     if (purge) {
-        messages = [];
-        messageOffset = 0;
-        msgs.html("");
+        messageAr = [];
+        messages.html("");
+        refreshTimer();
     }
     if (chid==null || chid==-1) {
         return;
@@ -57,49 +109,19 @@ function fetchMessages(purge) {
         $.ajax({
             type: "POST",
             url: "fetch_messages.php",
-            data: {channel_id: chid, offset: messageOffset},
+            data: {channel_id: chid, offset: off},
             dataType: "json",
             cache: false,
             success: function(response) {
-                if (messages.length > 0 ) {
-                    var ids = new Set(messages.map(msg => msg.msg_id));
-                    messages = [...messages, ...response.filter(msg => !ids.has(msg.msg_id))];
-                } else {
-                    messages = response;
+                addMessages(response);
+                writeMessages(messages);
+                if (purge) {
+                    messages.scrollTop(messages.prop("scrollHeight"));
                 }
-                messages.sort((a,b) => {
-                    let comp = 0;
-                    if (a.msg_id < b.msg_id) {
-                        comp = -1;
-                    } else if (a.msg_id > b.msg_id) {
-                        comp = 1;
-                    }
-                    return comp;
-                });
-                let prepend=-1;
-                let i=0;
-                for (i=0; i<messages.length;i++) {
-                    m=messages[i];
-                    if (m.domObject!=null) {
-                        prepend = i;
-                        break;
-                    }
-                };
-                for (i=prepend-1; i>=0; i--) {
-                    m=messages[i];
-                    m.domObject = msgs.prepend(formMessage(m));
-                }
-                messages.forEach((m,index,arr) => {
-                    if (m.domObject==null) {
-                        m.domObject = msgs.append(formMessage(m));
-                    } else {
-                        prepend = false;
-                    }
-                });
                 /*
                 $( "#messages" ).html(response).ready(function(){
-                msgs = $('messages'); // your parent ul element
-                msgs.children().each(function(i,msgEl){msgs.prepend(msgEl)})
+                messages = $('messages'); // your parent ul element
+                messages.children().each(function(i,msgEl){messages.prepend(msgEl)})
                 if (oldHTML!=$("#messages").html() && messageOffset==0) {
                     $("#messages").animate({ scrollTop: $('#messages').prop("scrollHeight")}, 1000);
                 }});
@@ -122,11 +144,10 @@ function fetchChannels() {
 }
 
 function sendMessage() {
-    messageOffset = 0;
     let msg = $("#msgbox").val();
     $("#msgbox").val("");
-    let msgs=$("#messages");
-    let chid=msgs.attr("channel_id");
+    let messages=$("#messages");
+    let chid=messages.attr("channel_id");
     if (chid==null || chid==-1) {
         return;
     } else {
@@ -137,6 +158,7 @@ function sendMessage() {
             cache: false,
             success: function(response) {
                 clearTimeout(tid);
+                messages.scrollTop(messages.prop("scrollHeight"));
                 refresh();
             }
         });
@@ -160,8 +182,13 @@ $(document).ready(function() {
 
     fetchChannels();
 
-    /*
     $("#messages").scroll(function() {
-        if ( $("#messages").scrollTop() == 0 && $("#messages").prop("scrollHeight")
-    })*/
+        let messages = $("#messages");
+        let scroll = messages.scrollTop();
+        if (scroll<5 && messages.prop("scrollHeight")>5) {
+            oldMessageCount=messageAr.length;
+            fetchMessages(false, messageAr.length);
+            messages.scrollTop(5);
+        }
+    })
 });
