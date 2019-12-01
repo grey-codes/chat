@@ -1,9 +1,10 @@
 <?php
 include("shared.php");
 include("simpleimg.php");
+header('Content-Type: application/json');
 
 if (!logged_in()) {
-    die("<span>You must be logged in!</span>");
+    die("{\"success\":false,\"error\":\"not logged in\"}");
 }
 
 $userID = $_SESSION['user_id'];
@@ -13,22 +14,22 @@ $sessUser = getUserByID($userID);
 
 if (!isset($_POST["channel_id"])) { 
     print_r($_POST);
-    die("<span>No channel ID given.</span>");
+    die("{\"success\":false,\"error\":\"no channel id given\"}");
 }
 $chid = $_POST["channel_id"];
 
 $cha=getChannelByID($chid);
 if (is_null($cha)) { 
-    die("<span>Invalid channel ID.</span>");
+    die("{\"success\":false,\"error\":\"invalid channel id\"}");
 }
 
 $rwx = getPermissionContext($sessUser, $cha); //get our permissions for it
 if (!($rwx->w)) { //if we can't read it, fail
-    die("<span>No permissions.</span>");
+    die("{\"success\":false,\"error\":\"no write permissions\"}");
 }
 
 if (!isset($_FILES["myfile"])) {
-    die("<span>No file given!</span>");
+    die("{\"success\":false,\"error\":\"no file attached\"}");
 }
 
 $fileExtensions = ['jpeg','jpg','png'];
@@ -50,7 +51,7 @@ $fileExt = strtolower(end($tmp));
 
 if (isset($fileName)) {
     if (!in_array($fileExt,$fileExtensions)) {
-        die("This process does not support this file type.");
+        die("{\"success\":false,\"error\":\"file type not supported\"}");
     }
     $imgPath=$PREFIX_UPLOADS . $owner_id . "/" . $fileHash . "." . $fileExt;
     $thumbPath=$PREFIX_THUMBNAILS . $owner_id . "/" . $fileHash . ".jpg";
@@ -97,6 +98,7 @@ if (isset($fileName)) {
         }
 
         sendMessage($owner_id,$chid_safe,$msg);
+        echo("{\"success\":true}");
     }
 }
 ?>

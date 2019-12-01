@@ -120,8 +120,8 @@ function channelPrompt() {
         sent=modalChildren.find("#slider_sent").val();
         $.post( "add_channel.php", { "channel_name": channelName, "octal": numVal, "sentiment":sent } ).done(function( data ) {
             fetchChannels();
-            if (data!="") {
-                alert(data);
+            if (!data.success) {
+                alert(data.error);
             }
         });
         removeModal();
@@ -313,6 +313,10 @@ function sendMessage() {
             data: {channel_id: chid, message: msg},
             cache: false,
             success: function(response) {
+                if (!response.success) {
+                    alert(response.error);
+                    return;
+                }
                 clearTimeout(tid);
                 messages.scrollTop(messages.prop("scrollHeight"));
                 refresh();
@@ -341,6 +345,10 @@ function uploadFile() {
             processData: false,
             contentType: false,
             success: function(response) {
+                if (!response.success) {
+                    alert(response.error);
+                    return;
+                }
                 console.log(response);
                 clearTimeout(tid);
                 messages.scrollTop(messages.prop("scrollHeight"));

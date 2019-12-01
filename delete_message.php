@@ -41,21 +41,4 @@ if ($usrPriv > $ownPriv || $userID == $resultObj->owner_id ) {
     die("{\"success\":false,\"error\":\"no perms\"}");
 }
 
-/*
-
-$rwx = getPermissionContext($sessUser, $cha); //get our permissions for it
-if (!($rwx->w)) { //if we can't read it, fail
-    die("<span>No permissions.</span>");
-}
-
-$chid_safe=$cha->channel_id;
-$owner_id=$sessUser->user_id;
-
-$Parsedown = new Parsedown();
-$Parsedown->setSafeMode(true);
-$msg_markdown=$Parsedown->text($msg);
-
-sendMessage($owner_id,$chid_safe,$msg_markdown);
-*/
-
 ?>
