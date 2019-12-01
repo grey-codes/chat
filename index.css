@@ -56,6 +56,12 @@
     border: none;
     cursor: pointer;
     width: 100%;
+    opacity:0.9;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+  }
+  input[type=button]:hover, input[type=submit]:hover {
+    opacity:1;
   }
 
   /* Set a style for form buttons */
@@ -231,12 +237,61 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden
+    overflow: hidden;
+  }
+
+  div.modal .inner {
+    width:70vmin;
+    height:40vmin;
+    background-color: #000;
+    border: solid 1px #FF0080;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    flex-direction: column;
+  }
+  
+  div.modal .inner p {
+    text-align: center;
   }
 
   img.popout {
     max-width: 90vmin;
     max-height: 90vmin;
+  }
+
+  .slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 24px;
+    background: #000;
+    border: solid 1px #FF0080;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+  }
+
+  .slider:hover {
+    opacity: 1;
+  }
+  
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #FF0080;
+    cursor: pointer;
+  }
+  
+  .slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #FF0080;
+    cursor: pointer;
   }
 
   /* Change styles for span and cancel button on extra small screens */

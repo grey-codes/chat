@@ -11,6 +11,36 @@ var addChannelHTML = `
 </div>
 `;
 
+var addChannelModal = `
+<div class="inner">
+    <h1>Create Channel</h1>
+    <form>
+        <p>Public Access:<br>
+            <label class="checkbox">Read: <input type="checkbox" id="pubR" checked></label>
+            <label class="checkbox">Write: <input type="checkbox" id="pubW" checked></label>
+            <label class="checkbox">Execute: <input type="checkbox" id="pubX" checked></label>
+        </p>
+        <p>Group Access:<br>
+            <label class="checkbox">Read: <input type="checkbox" id="groupR" checked></label>
+            <label class="checkbox">Write: <input type="checkbox" id="groupW" checked></label>
+            <label class="checkbox">Execute: <input type="checkbox" id="groupX" checked></label>
+        </p>
+        <p>Private Access:<br>
+            <label class="checkbox">Read: <input type="checkbox" id="privR" checked></label>
+            <label class="checkbox">Write: <input type="checkbox" id="privW" checked></label>
+            <label class="checkbox">Execute: <input type="checkbox" id="privX" checked></label>
+        </p>
+        <br>
+        <div class="slidecontainer">
+        <label for="slider_sent" id="label_sent">Minimum Sentiment (Negative-Positive):
+        <br><input type="range" min="-1" max="1" value="-1" class="slider" step="0.01" id="slider_sent">
+        </label>
+        </div>
+        <input type="button" value="Submit">
+    </form>
+    </div>
+`
+
 function removeModal() {
     let modal = $(".modal").last();
     modal.remove();
@@ -21,6 +51,9 @@ function makeModal(code) {
     let modal = $(".modal").last();
     modal.click(removeModal);
     modal.append(code);
+    $( "div.modal .inner" ).click( e => {
+        e.stopPropagation();
+    });
 }
 
 function refresh() {
@@ -38,13 +71,17 @@ function refreshTimer() {
     tid = setTimeout(refresh, UPDATE_TIME_MS);
 }
 
+function channelPrompt() {
+    makeModal(addChannelModal);
+}
+
 function channelAddClick() {
     $(".channelBar .textRow").click(function() {
         $("#messages").attr("channel_id",$(this).attr("channel_id"));
         fetchMessages(true);
     });
     $(".channelBar .textRow").last().unbind();
-    $("#addChannel").click(function() {
+    $("#addChannel").click( channelPrompt);/*function() {
         let channelName=prompt("Enter the channel name:");
         let perm = prompt("Enter the three-digit octal permission.","777");
         numVal = parseInt(perm,8);
@@ -56,7 +93,7 @@ function channelAddClick() {
             }
           });
         }
-    })
+    })*/
 }
 
 function formMessage(m) {
