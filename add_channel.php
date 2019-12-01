@@ -8,6 +8,7 @@ if (!logged_in()) {
 $userID = $_SESSION['user_id'];
 $username = $_SESSION['user_name'];
 $sessUser = getUserByID($userID);
+$sentiment=-1;
 
 if (!isset($_POST["channel_name"])) { 
     die("<span>No channel name given.</span>");
@@ -24,9 +25,12 @@ if (!is_null($cha)) {
     die("<span>Channel already exists!.</span>");
 }
 
+if (isset($_POST["sentiment"])) { 
+    $sentiment = $_POST["sentiment"];
+}
+
 $owner_id=$sessUser->user_id;
 
-
-addChannel($owner_id,$chana,$octal);
+echo(addChannel($owner_id,$chana,$octal,$sentiment));
 
 ?>

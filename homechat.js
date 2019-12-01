@@ -84,6 +84,7 @@ function channelPrompt() {
         let permGrp = 0
         let permPrv = 0;
         let numVal = 0;
+        let sent=-1;
         //calculate octets
         let modalChildren = $("div.modal .inner").children();
         if (modalChildren.find("#privR").is(":checked")) {
@@ -115,8 +116,9 @@ function channelPrompt() {
         }
         //convert to octal
         numVal = permPrv*8*8+permGrp*8+permPub;
-        
-        $.post( "add_channel.php", { "channel_name": channelName, "octal": numVal } ).done(function( data ) {
+        //sentiment
+        sent=modalChildren.find("#slider_sent").val();
+        $.post( "add_channel.php", { "channel_name": channelName, "octal": numVal, "sentiment":sent } ).done(function( data ) {
             fetchChannels();
             if (data!="") {
                 alert(data);

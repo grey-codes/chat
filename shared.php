@@ -108,7 +108,7 @@ $chaByIDQuery = "SELECT * FROM " . $chatb . " WHERE channel_id = ?";
 $chaByNameQuery = "SELECT * FROM " . $chatb . " WHERE name = ?";
 $usrRegisterQuery = "INSERT INTO " . $usrtb . " (user_id, user_name, pass_hash) VALUES (NULL, ?, ?)";
 $msgSendQuery = "INSERT INTO " . $msgtb . " (msg_id, channel_id, owner_id, value) VALUES (NULL, ?, ?, ?)";
-$chaAddQuery = "INSERT INTO " . $chatb . " (channel_id, name, owner_id, unixperm) VALUES (NULL, ?, ?, ?)";
+$chaAddQuery = "INSERT INTO " . $chatb . " (channel_id, name, owner_id, unixperm, minSentiment) VALUES (NULL, ?, ?, ?, ?)";
 
 $getUserByNameStatement = $conn->prepare($usrByNameQuery);
 $getUserByIDStatement = $conn->prepare($usrByIDQuery);
@@ -191,11 +191,11 @@ function sendMessage($uid,$chid,$msg) {
     return $result;
 }
 
-function addChannel($uid,$chana,$oct) {
+function addChannel($uid,$chana,$oct,$sent=-1) {
     global $chaAddStatement;
     global $conn;
     $chana_safe = mysqli_real_escape_string($conn,$chana);
-    $chaAddStatement->bind_param("sii", $chana, $uid, $oct);
+    $chaAddStatement->bind_param("siid", $chana, $uid, $oct, $sent);
     $chaAddStatement->execute();
     $result = $chaAddStatement->get_result();
     //$resultobj = $resultobj->fetch_object();
