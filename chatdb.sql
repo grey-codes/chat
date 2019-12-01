@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS channels (
   name varchar(20) NOT NULL,
   owner_id int NOT NULL,
   unixperm smallint NOT NULL,
+  minSentiment float NOT NULL DEFAULT -1,
   PRIMARY KEY (channel_id),
   FOREIGN KEY (owner_id) REFERENCES users(user_id) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=INNODB;
@@ -18,6 +19,7 @@ CREATE TABLE IF NOT EXISTS messages (
   msg_id int NOT NULL AUTO_INCREMENT,
   channel_id int NOT NULL,
   owner_id int NOT NULL,
+  dateCreated timestamp DEFAULT(CURRENT_TIMESTAMP),
   value TEXT,
   PRIMARY KEY (msg_id),
   FOREIGN KEY (channel_id) REFERENCES channels(channel_id) ON DELETE CASCADE ON UPDATE CASCADE,
