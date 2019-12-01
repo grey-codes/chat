@@ -275,15 +275,27 @@ $(document).ready(function() {
     $("#messages").scroll(function(e) {
         let messages = $("#messages");
         let scroll = messages.scrollTop();
-        if (scroll<32 && messages.prop("scrollHeight")>32 && canPullMore && e.originalEvent) {
+        if (scroll<64 && messages.prop("scrollHeight")>32 && canPullMore && e.originalEvent) {
             canPullMore=false;
             fetchMessages(false, messageAr.length);
-            messages.scrollTop(Math.max(64,scroll));
+            messages.scrollTop(Math.max(5,scroll));
+        }
+    });
+    $("#messages").bind('mousewheel', function(e){
+        if(e.originalEvent.wheelDelta /120 > 0) {
+            if (!canPullMore) {
+                let messages = $("#messages");
+                messages.scrollTop(Math.max(5,messages.scrollTop()));
+                return false;
+            }
+            //console.log('upscroll');
         }
     });
 
     $("#messages").on('DOMSubtreeModified', function() {
         canPullMore=true;
+        let messages = $("#messages");
+        messages.scrollTop(Math.max(5,messages.scrollTop()));
     });
 
     $("#uploadBtn").click(e=>{
