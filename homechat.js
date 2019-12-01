@@ -244,6 +244,16 @@ function writeMessages(messageContainer) {
     processImages(children.find("img"));
 }
 
+function purgeMessages(container,purgeAr) {
+    messageAr.forEach(element => {
+        if (purgeAr.includes(element.msg_id)) {
+            if (element.domObject!=null) {
+                element.domObject.remove()
+            }
+        }
+    });
+}
+
 function fetchMessages(purge, off) {
     let messages=$("#messages");
     let chid=messages.attr("channel_id");
@@ -267,6 +277,17 @@ function fetchMessages(purge, off) {
                 writeMessages(messages);
                 if (purge) {
                     messages.scrollTop(messages.prop("scrollHeight"));
+                } else {
+                    $.ajax({
+                        type: "POST",
+                        url: "fetch_messages_del.php",
+                        data: {},
+                        dataType: "json",
+                        cache: false,
+                        success: function(response) {
+                            purgeMessages(messages,response);
+                        }
+                    });
                 }
                 /*
                 $( "#messages" ).html(response).ready(function(){

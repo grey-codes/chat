@@ -19,7 +19,7 @@ $msgAr = array();
 
 if ( (!is_null($result)) && $result->num_rows > 0) { //for each channel
     while($o = $result->fetch_object()) {
-        array_push($msgAr,$o);
+        array_push($msgAr,$o->msg_id);
     }
 }
 
