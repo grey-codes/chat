@@ -271,16 +271,20 @@ $(document).ready(function() {
 
     fetchChannels();
 
-    let oldMessageCount=-1;
-    $("#messages").scroll(function() {
+    var canPullMore = true;
+    $("#messages").scroll(function(e) {
         let messages = $("#messages");
         let scroll = messages.scrollTop();
-        if (scroll<64 && messages.prop("scrollHeight")>32 && oldMessageCount!=messageAr.length) {
-            oldMessageCount=messageAr.length;
+        if (scroll<32 && messages.prop("scrollHeight")>32 && canPullMore && e.originalEvent) {
+            canPullMore=false;
             fetchMessages(false, messageAr.length);
-            messages.scrollTop(Math.max(32,scroll));
+            messages.scrollTop(Math.max(64,scroll));
         }
-    })
+    });
+
+    $("#messages").on('DOMSubtreeModified', function() {
+        canPullMore=true;
+    });
 
     $("#uploadBtn").click(e=>{
         $("#fileUpload").click();
