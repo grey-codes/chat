@@ -56,12 +56,6 @@
     border: none;
     cursor: pointer;
     width: 100%;
-    opacity:0.9;
-    -webkit-transition: .2s;
-    transition: opacity .2s;
-  }
-  input[type=button]:hover, input[type=submit]:hover {
-    opacity:1;
   }
 
   /* Set a style for form buttons */
@@ -242,7 +236,6 @@
 
   div.modal .inner {
     width:70vmin;
-    height:40vmin;
     background-color: #000;
     border: solid 1px #FF0080;
 
@@ -269,13 +262,6 @@
     background: #000;
     border: solid 1px #FF0080;
     outline: none;
-    opacity: 0.7;
-    -webkit-transition: .2s;
-    transition: opacity .2s;
-  }
-
-  .slider:hover {
-    opacity: 1;
   }
   
   .slider::-webkit-slider-thumb {
@@ -292,6 +278,47 @@
     height: 25px;
     background: #FF0080;
     cursor: pointer;
+  }
+
+  .checkbox {
+    display: inline-flex;
+    cursor: pointer;
+    position: relative;
+}
+
+  .checkbox > input {
+      height: 1rem;
+      width: 1rem;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      -o-appearance: none;
+      appearance: none;
+      border: 1px solid #FF0080;
+      outline: none;
+      transition-duration: 0.1s;
+      background-color: #000;
+      cursor: pointer;
+    }
+
+  .checkbox > input:checked {
+      border: 1px solid #FF0080;
+      background-color: #000;
+  }
+
+  .checkbox > input:checked::before {
+      content: '\2713';
+      display: block;
+      text-align: center;
+      color: #FF0080;
+      position: absolute;
+      width:1rem;
+      height:1rem;
+      top:-0.1rem;
+      font-size: 1.0rem;
+  }
+
+  .checkbox > input:active {
+      border: 2px solid #FF0080;
   }
 
   /* Change styles for span and cancel button on extra small screens */

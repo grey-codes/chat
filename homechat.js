@@ -21,7 +21,7 @@ var addChannelModal = `
             <label class="checkbox">Execute: <input type="checkbox" id="pubX" checked></label>
         </p>
         <p>Group Access:<br>
-            <label class="checkbox">Read: <input type="checkbox" id="groupR" checked></label>
+            <label class="checkbox"><span>Read: </span><input type="checkbox" id="groupR" checked></label>
             <label class="checkbox">Write: <input type="checkbox" id="groupW" checked></label>
             <label class="checkbox">Execute: <input type="checkbox" id="groupX" checked></label>
         </p>
