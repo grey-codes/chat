@@ -1,334 +1,345 @@
- 
- html {
-   background-color: #111;
- }
- 
+
+html {
+  background-color: #111;
+}
+
 ::-webkit-scrollbar {
-  width: 0.5vw;  /* Remove scrollbar space */
-  background: transparent;  /* Optional: just make scrollbar invisible */
+width: 0.5vw;  /* Remove scrollbar space */
+background: transparent;  /* Optional: just make scrollbar invisible */
 }
 /* Optional: show position indicator in red */
 ::-webkit-scrollbar-thumb {
-    background: #FF0080;
+  background: #FF0080;
 }
 
- * {
-    font-family: Roboto, Arial, sans-serif;
-    color: #fff;
- }
-  
-  /* Full-width inputs */
-  input[type=text], input[type=password], textarea {
-    width: 100%;
-    padding: 1.5rem 2.5rem;
-    margin: 1rem 0;
-    display: inline-block;
-    border:none;
-    border-bottom: 0.2rem solid;
-    border-bottom-color: #FF0080;
-    box-sizing: border-box;
-    background-color: #333;
-    box-shadow: 0 0 5px rgba(0,0,0,0);
-    transition: box-shadow 0.3s ease-in-out;
-  }
-  input[type=text]:focus, input[type=password]:focus, textarea:focus {
-    box-shadow: 0 0 5px #FF0080;
-    transition: box-shadow 0.2s ease-in-out;
-  }
-  /*
-  input:-webkit-autofill,
-  input:-webkit-autofill:hover, 
-  input:-webkit-autofill:focus,
-  textarea:-webkit-autofill,
-  textarea:-webkit-autofill:hover,
-  textarea:-webkit-autofill:focus,
-  select:-webkit-autofill,
-  select:-webkit-autofill:hover,
-  select:-webkit-autofill:focus {
-    border: 1px solid black !important;
-    background-color: transparent !important;
-  }
-    */
-  
-  /* Set a style for all buttons */
-  input[type=button], input[type=submit] {
-    background-color: #FF0080;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-  }
+* {
+  font-family: Roboto, Arial, sans-serif;
+  color: #fff;
+}
 
-  /* Set a style for form buttons */
-  form input[type=button],  form input[type=submit] {
-    margin: 1rem 0;
-    padding: 1.5rem 2.5rem;
-  }
+/* Full-width inputs */
+input[type=text], input[type=password], textarea {
+  width: 100%;
+  padding: 1.5rem 2.5rem;
+  margin: 1rem 0;
+  display: inline-block;
+  border:none;
+  border-bottom: 0.2rem solid;
+  border-bottom-color: #FF0080;
+  box-sizing: border-box;
+  background-color: #333;
+  box-shadow: 0 0 5px rgba(0,0,0,0);
+  transition: box-shadow 0.3s ease-in-out;
+}
+input[type=text]:focus, input[type=password]:focus, textarea:focus {
+  box-shadow: 0 0 5px #FF0080;
+  transition: box-shadow 0.2s ease-in-out;
+}
+/*
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  border: 1px solid black !important;
+  background-color: transparent !important;
+}
+  */
 
-  input[type=button]:disabled,  input[type=submit]:disabled {
-    background-color: #333;
-  }
+/* Set a style for all buttons */
+input[type=button], input[type=submit] {
+  background-color: #FF0080;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
 
-  /* Add a hover effect for buttons */
-  button:hover {
-    opacity: 0.8;
-  }
-  
-  .header-title {
-      padding: 0.5rem;
-      background-color: #FF0080;
-      color: #000;
-      text-align:center;
-  }
-  
-  .header-inner {
-      padding: 0.5rem;
-      font-size: 0.5rem;
-      text-align: right;
-      background-color: #222;
-  }
-  
-  .footer {
-      padding: 0.5rem;
-      font-size: 0.5rem;
-      text-align: right;
-      background-color: #222;
-  }
-  
-  /* style the chat panels */
+/* Set a style for form buttons */
+form input[type=button],  form input[type=submit] {
+  margin: 1rem 0;
+  padding: 1.5rem 2.5rem;
+}
 
-  div {
+input[type=button]:disabled,  input[type=submit]:disabled {
+  background-color: #333;
+}
+
+/* Add a hover effect for buttons */
+button:hover {
+  opacity: 0.8;
+}
+
+.header-title {
     padding: 0.5rem;
-  }
-
-  .outerContainer {
-    width: 100%;
-    padding: 0px;
-    overflow: hidden;
-  }
-
-  .container {
-    margin: 0 auto;
-    width: 80vw;
-    overflow: hidden;
-  }
-
-  .chatRootPanel {
-    display: flex;
-  }
-
-  .channelBar .addButton {
-    border-bottom: none;
-    border: none;
-    margin: 0rem;
-  }
-
-  .channelBar .addButton span:hover {
-    color: #aaa;
-    transition: color 0.1s ease-in-out;
-  }
-
-  .chatRootPanel .channelBar {
-    width: 30%;
-    border: #333 solid 1px;
-    overflow-y: auto;
-    scrollbar-color: #FF0080 rgba(0,0,0,0);
-    scrollbar-width: thin;
-  }
-
-  .chatRootPanel .chatPanel {
-    width: 70%;
-    border: #333 solid 1px;
-    justify-content: center;
-  }
-
-  .chatPanel .messagePanel {
-    height:59vh;
-    border: #333 solid 1px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    scrollbar-color: #FF0080 rgba(0,0,0,0);
-    scrollbar-width: thin;
-  }
-
-  .chatPanel .typePanel {
-    position: relative;
-    border: #333 solid 1px;
-    margin-top: 1vh;
-  }
-  
-  .textRow {
-    word-wrap: normal;
-    overflow-wrap: break-word;
-    border-bottom: #333 dashed 1px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .chatPanel .textRow.last {
-    border-bottom: none;
-    padding-bottom: 0px;
-  }
-
-  .chatPanel .textRow .author {
-    font-size: 1.1rem;
-    vertical-align: bottom;
-  }
-  .chatPanel .textRow .author::after {
-    content: ": ";
-  }
-
-  .chatPanel .textRow .message {
-    font-size: 0.8rem;
-    vertical-align: bottom;
-  }
-
-  .chatPanel .typePanel {
-    display:flex;
-    overflow:hidden;
-  }
-
-  .typePanel textarea {
-    width:100%;
-    height:4vh;
-    padding: 0;
-    margin: 0.5rem;
-  }
-
-  .typePanel input[type=button] {
-    width:5rem;
-    height:4vh;
-    margin: 0.5rem;
-  }
-
-  .typePanel .uploadButton {
-    position: absolute;
-    /*right: 9vw;*/
-    width: 1.5rem !important;
-    margin-right:1.5rem !important;
-    font-size: 1.5rem;
-    background: none;
-  }
-
-  textarea {
-    resize: none; 
-  }
-
-  *:focus {
-    outline: none;
-  }
-
-  div.modal {
-    z-index: 100;
-    background-color: rgba(0,0,0,0.5);
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    left:0;
-    top:0;
-    padding:0;
-    margin:0;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-  }
-
-  div.modal .inner {
-    width:70vmin;
-    background-color: #000;
-    border: solid 1px #FF0080;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    flex-direction: column;
-  }
-  
-  div.modal .inner p {
-    text-align: center;
-  }
-
-  img.popout {
-    max-width: 90vmin;
-    max-height: 90vmin;
-  }
-
-  .slider {
-    -webkit-appearance: none;
-    width: 100%;
-    height: 24px;
-    background: #000;
-    border: solid 1px #FF0080;
-    outline: none;
-  }
-  
-  .slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 25px;
-    height: 25px;
-    background: #FF0080;
-    cursor: pointer;
-  }
-  
-  .slider::-moz-range-thumb {
-    width: 25px;
-    height: 25px;
-    background: #FF0080;
-    cursor: pointer;
-  }
-
-  .checkbox {
-    display: inline-flex;
-    cursor: pointer;
-    position: relative;
+    background-color: #FF0080;
+    color: #000;
+    text-align:center;
 }
 
-  .checkbox > input {
-      height: 1rem;
-      width: 1rem;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      -o-appearance: none;
-      appearance: none;
-      border: 1px solid #FF0080;
-      outline: none;
-      transition-duration: 0.1s;
-      background-color: #000;
-      cursor: pointer;
-    }
+.header-inner {
+    padding: 0.5rem;
+    font-size: 0.5rem;
+    text-align: right;
+    background-color: #222;
+}
 
-  .checkbox > input:checked {
-      border: 1px solid #FF0080;
-      background-color: #000;
+.footer {
+    padding: 0.5rem;
+    font-size: 0.5rem;
+    text-align: right;
+    background-color: #222;
+}
+
+/* style the chat panels */
+
+div {
+  padding: 0.5rem;
+}
+
+.outerContainer {
+  width: 100%;
+  padding: 0px;
+  overflow: hidden;
+}
+
+.container {
+  margin: 0 auto;
+  width: 80vw;
+  overflow: hidden;
+}
+
+.chatRootPanel {
+  display: flex;
+}
+
+.channelBar .addButton {
+  border-bottom: none;
+  border: none;
+  margin: 0rem;
+}
+
+.channelBar .addButton span:hover {
+  color: #aaa;
+  transition: color 0.1s ease-in-out;
+}
+
+.chatRootPanel .channelBar {
+  width: 30%;
+  border: #333 solid 1px;
+  overflow-y: auto;
+  scrollbar-color: #FF0080 rgba(0,0,0,0);
+  scrollbar-width: thin;
+}
+
+.chatRootPanel .chatPanel {
+  width: 70%;
+  border: #333 solid 1px;
+  justify-content: center;
+}
+
+.chatPanel .messagePanel {
+  height:59vh;
+  border: #333 solid 1px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-color: #FF0080 rgba(0,0,0,0);
+  scrollbar-width: thin;
+}
+
+.chatPanel .typePanel {
+  position: relative;
+  border: #333 solid 1px;
+  margin-top: 1vh;
+}
+
+.textRow {
+  word-wrap: normal;
+  overflow-wrap: break-word;
+  border-bottom: #333 dashed 1px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chatPanel .textRow.last {
+  border-bottom: none;
+  padding-bottom: 0px;
+}
+
+.chatPanel .textRow .author {
+  font-size: 1.1rem;
+  vertical-align: bottom;
+}
+.chatPanel .textRow .author::after {
+  content: ": ";
+}
+
+.chatPanel .textRow .message {
+  font-size: 0.8rem;
+  vertical-align: bottom;
+}
+
+.chatPanel .typePanel {
+  display:flex;
+  overflow:hidden;
+}
+
+.typePanel textarea {
+  width:100%;
+  height:4vh;
+  padding: 0;
+  margin: 0.5rem;
+}
+
+.typePanel input[type=button] {
+  width:5rem;
+  height:4vh;
+  margin: 0.5rem;
+}
+
+.typePanel .uploadButton {
+  position: absolute;
+  /*right: 9vw;*/
+  width: 1.5rem !important;
+  margin-right:1.5rem !important;
+  font-size: 1.5rem;
+  background: none;
+}
+
+textarea {
+  resize: none; 
+}
+
+*:focus {
+  outline: none;
+}
+
+div.modal {
+  z-index: 100;
+  background-color: rgba(0,0,0,0.5);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left:0;
+  top:0;
+  padding:0;
+  margin:0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+div.modal .inner {
+  width:70vmin;
+  background-color: #000;
+  border: solid 1px #FF0080;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  flex-direction: column;
+}
+
+div.modal .inner p {
+  text-align: center;
+}
+
+img.popout {
+  max-width: 90vmin;
+  max-height: 90vmin;
+}
+
+.slidecontainer {
+  text-align: center;
+}
+
+
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 1.5rem;
+  background: #333;
+  border: solid 1px #FF0080;
+  outline: none;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 1.6rem;
+  height: 1.6rem;
+  background: #FF0080;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 1.6rem;
+  height: 1.6rem;
+  background: #FF0080;
+  cursor: pointer;
+}
+
+.checkbox {
+  display: inline-flex;
+  cursor: pointer;
+  position: relative;
+}
+
+.checkbox > input {
+    height: 1rem;
+    width: 1rem;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -o-appearance: none;
+    appearance: none;
+    border: 1px solid #FF0080;
+    outline: none;
+    transition-duration: 0.1s;
+    background-color: #333;
+    cursor: pointer;
   }
 
-  .checkbox > input:checked::before {
-      content: '\2713';
-      display: block;
-      text-align: center;
-      color: #FF0080;
-      position: absolute;
-      width:1rem;
-      height:1rem;
-      top:-0.1rem;
-      font-size: 1.0rem;
-  }
+.checkbox > input:checked {
+    border: 1px solid #FF0080;
+    background-color: #333;
+}
 
-  .checkbox > input:active {
-      border: 2px solid #FF0080;
-  }
+.checkbox > input:checked::before {
+    content: '\2713';
+    display: block;
+    text-align: center;
+    color: #FF0080;
+    position: absolute;
+    width:1rem;
+    height:1rem;
+    top:-0.1rem;
+    font-size: 1.0rem;
+}
 
-  /* Change styles for span and cancel button on extra small screens */
-  @media screen and (min-aspect-ratio: 120/80) {
-    .container {
-        width: 120vh;
-    }
-  } 
-  @media screen and (max-aspect-ratio: 80/80) {
-    html {
-      font-size: 1.5vmax;
-    }
-  } 
+.checkbox > input:active {
+    border: 2px solid #FF0080;
+}
+
+input[type=text].oneline, input[type=password].oneline, textarea.oneline {
+  display:inline-block;
+  height: 1.5rem;
+  padding: 0.5rem;
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (min-aspect-ratio: 120/80) {
+  .container {
+      width: 120vh;
+  }
+} 
+@media screen and (max-aspect-ratio: 80/80) {
+  html {
+    font-size: 1.5vmax;
+  }
+} 

@@ -15,6 +15,9 @@ var addChannelModal = `
 <div class="inner">
     <h1>Create Channel</h1>
     <form>
+        <p>Channel Name:<br>
+        <input type="text" id="chanName" class="oneline">
+        </p>
         <p>Public Access:<br>
             <label class="checkbox">Read: <input type="checkbox" id="pubR" checked></label>
             <label class="checkbox">Write: <input type="checkbox" id="pubW" checked></label>
@@ -36,7 +39,7 @@ var addChannelModal = `
         <br><input type="range" min="-1" max="1" value="-1" class="slider" step="0.01" id="slider_sent">
         </label>
         </div>
-        <input type="button" value="Submit">
+        <input type="button" id="addChaSubmit" value="Submit">
     </form>
     </div>
 `
@@ -73,6 +76,9 @@ function refreshTimer() {
 
 function channelPrompt() {
     makeModal(addChannelModal);
+    $("#addChaSubmit").click( e=> {
+        removeModal();
+    });
 }
 
 function channelAddClick() {
