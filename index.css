@@ -177,6 +177,13 @@ div {
   content: ": ";
 }
 
+.chatPanel .textRow .datetime {
+  font-size: 1rem;
+  vertical-align: bottom;
+  color: #ccc;
+  float: right;
+}
+
 .chatPanel .textRow .message {
   font-size: 0.8rem;
   vertical-align: bottom;

@@ -150,9 +150,15 @@ function channelAddClick() {
 }
 
 function formMessage(m) {
+    let time = "";
+    try {
+        time = m.dateCreated.split(" ")[1];
+    } catch(e) {
+        time="Invalid Time";
+    }
     let html = `
     <div class="textRow">
-    <span class="author">${m.user_name}</span>&nbsp;<span class="message">${m.value}</span>
+    <span class="author">${m.user_name}</span><span class="datetime">${time}</span><span class="message">${m.value}</span>
     </div>`;
     return html;
 }
