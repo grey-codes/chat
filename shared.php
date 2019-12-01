@@ -108,6 +108,8 @@ $chaByIDQuery = "SELECT * FROM " . $chatb . " WHERE channel_id = ?";
 $chaByNameQuery = "SELECT * FROM " . $chatb . " WHERE name = ?";
 $usrRegisterQuery = "INSERT INTO " . $usrtb . " (user_id, user_name, pass_hash) VALUES (NULL, ?, ?)";
 $msgSendQuery = "INSERT INTO " . $msgtb . " (msg_id, channel_id, owner_id, value) VALUES (NULL, ?, ?, ?)";
+$msgDelQuery = "DELETE FROM " . $msgtb . " WHERE msg_id = ?";
+$msgRegDelQuery = "INSERT INTO " . $msgtb . "_deleted (msg_id) VALUES (?)";
 $chaAddQuery = "INSERT INTO " . $chatb . " (channel_id, name, owner_id, unixperm, minSentiment) VALUES (NULL, ?, ?, ?, ?)";
 
 $getUserByNameStatement = $conn->prepare($usrByNameQuery);
@@ -117,6 +119,8 @@ $getChannelByIDStatement = $conn->prepare($chaByIDQuery);
 $getChannelByNameStatement = $conn->prepare($chaByNameQuery);
 $usrRegisterStatement = $conn->prepare($usrRegisterQuery);
 $msgSendStatement = $conn->prepare($msgSendQuery);
+$msgDelStatement= $conn->prepare($msgDelQuery);
+$msgRegDelStatement= $conn->prepare($msgRegDelQuery);
 $chaAddStatement = $conn->prepare($chaAddQuery);
 
 function getUserRoleByID($uid) {
@@ -187,6 +191,20 @@ function sendMessage($uid,$chid,$msg) {
     $msgSendStatement->bind_param("iis", $chid, $uid, $msg);
     $msgSendStatement->execute();
     $result = $msgSendStatement->get_result();
+    //$resultobj = $resultobj->fetch_object();
+    return $result;
+}
+
+function deleteMessage($mid) {
+    global $msgDelStatement;
+    global $msgRegDelStatement;
+    global $conn;
+    //$msg_safe = htmlspecialchars($msg);
+    $msgDelStatement->bind_param("i", $mid);
+    $msgDelStatement->execute();
+    $msgRegDelStatement->bind_param("i", $mid);
+    $msgRegDelStatement->execute();
+    $result = $msgRegDelStatement->get_result();
     //$resultobj = $resultobj->fetch_object();
     return $result;
 }

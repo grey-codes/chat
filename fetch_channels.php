@@ -1,5 +1,6 @@
 <?php
 include("shared.php");
+header('Content-Type: application/json');
 
 if (!logged_in()) {
     die(json_encode(array()));

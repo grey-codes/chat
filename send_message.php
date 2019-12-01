@@ -3,6 +3,7 @@
 //use voku\helper\AntiXSS;
 
 include("shared.php");
+header('Content-Type: application/json');
 
 if (!logged_in()) {
     die("<span>You must be logged in!</span>");
