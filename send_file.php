@@ -87,7 +87,7 @@ if (isset($fileName)) {
         $image->resize($sz[0], $sz[1]);
         $image->save($thumbPathAbs);
 
-        $msg="<p><img src=\"" . $thumbPath .  "\" fullSrc=\"" . $imgPath . "\" width=\"" . $sz[0] . "px\" height=\"" . $sz[1] . "px\"></img></p>";
+        $msg="<p><img data-src=\"" . $thumbPath .  "\" src=\"\" fullSrc=\"" . $imgPath . "\" width=\"" . $sz[0] . "px\" height=\"" . $sz[1] . "px\"></img></p>";
         
         if (isset($_POST["message"])) {
             $Parsedown = new Parsedown();

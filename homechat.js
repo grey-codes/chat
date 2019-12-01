@@ -93,6 +93,33 @@ function addMessages(msgAr) {
     });
 }
 
+function fixImageHeight(img) {
+    img.attr("max-width",Math.max(parseInt(img.attr("max-width")) || 0,img.width()));
+    let targetWidth = Math.min( img.parent().innerWidth(), parseInt(img.attr("max-width")));
+    let actualWidth = img.width();
+    if (actualWidth != targetWidth) {
+        img.height(img.height()/actualWidth*targetWidth);
+        img.width(targetWidth);
+    }
+}
+
+function processImages(imgs) {
+    imgs.unbind();
+    imgs.Lazy();
+    imgs.each( (indx,el)=> {
+        let img = $(el);
+        fixImageHeight(img);
+    });
+    imgs.click(e=> {
+        let src = e.target.src;
+        let fullSrc = e.target.getAttribute("fullSrc");
+        if (fullSrc!=null && fullSrc!="") {
+            src=fullSrc;
+        }
+        makeModal("<img class=\"popout\" src=\"" + src + "\"></img>")
+    });
+}
+
 function writeMessages(messageContainer) {
     let prepend=-1;
     let i=0;
@@ -106,10 +133,11 @@ function writeMessages(messageContainer) {
     for (i=prepend-1; i>=0; i--) {
         m=messageAr[i];
         m.domObject = messageContainer.prepend(formMessage(m));
+        m.domObject = $(formMessage(m)).prependTo(messageContainer);
     }
     messageAr.forEach((m,index,arr) => {
         if (m.domObject==null) {
-            m.domObject = messageContainer.append(formMessage(m));
+            m.domObject = $(formMessage(m)).appendTo(messageContainer);
         } else {
             prepend = false;
         }
@@ -117,15 +145,7 @@ function writeMessages(messageContainer) {
     let children = messageContainer.children();
     children.removeClass("last");
     children.last().addClass("last");
-    children.find("img").unbind();
-    children.find("img").click(e=> {
-        let src = e.target.src;
-        let fullSrc = e.target.getAttribute("fullSrc");
-        if (fullSrc!=null && fullSrc!="") {
-            src=fullSrc;
-        }
-        makeModal("<img class=\"popout\" src=\"" + src + "\"></img>")
-    });
+    processImages(children.find("img"));
 }
 
 function fetchMessages(purge, off) {
@@ -251,13 +271,14 @@ $(document).ready(function() {
 
     fetchChannels();
 
+    let oldMessageCount=-1;
     $("#messages").scroll(function() {
         let messages = $("#messages");
         let scroll = messages.scrollTop();
-        if (scroll<5 && messages.prop("scrollHeight")>5) {
+        if (scroll<64 && messages.prop("scrollHeight")>32 && oldMessageCount!=messageAr.length) {
             oldMessageCount=messageAr.length;
             fetchMessages(false, messageAr.length);
-            messages.scrollTop(5);
+            messages.scrollTop(Math.max(32,scroll));
         }
     })
 
@@ -270,5 +291,13 @@ $(document).ready(function() {
             uploadFile();
             $("#fileUpload").val("");
         }
+    });
+
+    $(window).resize( e => {
+        let imgs = $(".textRow p img");
+        imgs.each( (indx,el)=> {
+            let img = $(el);
+            fixImageHeight(img);
+        });
     });
 });
