@@ -77,6 +77,51 @@ function refreshTimer() {
 function channelPrompt() {
     makeModal(addChannelModal);
     $("#addChaSubmit").click( e=> {
+        e.stopPropagation();
+        let channelName=$("#chanName").val();
+        //init vars
+        let permPub = 0;
+        let permGrp = 0
+        let permPrv = 0;
+        let numVal = 0;
+        //calculate octets
+        let modalChildren = $("div.modal .inner").children();
+        if (modalChildren.find("#privR").is(":checked")) {
+            permPrv+=4;
+        }
+        if (modalChildren.find("#privW").is(":checked")) {
+            permPrv+=2;
+        }
+        if (modalChildren.find("#privX").is(":checked")) {
+            permPrv+=1;
+        }
+        if (modalChildren.find("#groupR").is(":checked")) {
+            permGrp+=4;
+        }
+        if (modalChildren.find("#groupW").is(":checked")) {
+            permGrp+=2;
+        }
+        if (modalChildren.find("#groupX").is(":checked")) {
+            permGrp+=1;
+        }
+        if (modalChildren.find("#pubR").is(":checked")) {
+            permPub+=4;
+        }
+        if (modalChildren.find("#pubW").is(":checked")) {
+            permPub+=2;
+        }
+        if (modalChildren.find("#pubX").is(":checked")) {
+            permPub+=1;
+        }
+        //convert to octal
+        numVal = permPrv*8*8+permGrp*8+permPub;
+        
+        $.post( "add_channel.php", { "channel_name": channelName, "octal": numVal } ).done(function( data ) {
+            fetchChannels();
+            if (data!="") {
+                alert(data);
+            }
+        });
         removeModal();
     });
 }
@@ -87,7 +132,7 @@ function channelAddClick() {
         fetchMessages(true);
     });
     $(".channelBar .textRow").last().unbind();
-    $("#addChannel").click( channelPrompt);/*function() {
+    $("#addChannel").click( channelPrompt );/*function() {
         let channelName=prompt("Enter the channel name:");
         let perm = prompt("Enter the three-digit octal permission.","777");
         numVal = parseInt(perm,8);
