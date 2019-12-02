@@ -594,6 +594,19 @@ $(document).ready(function() {
         cache: false,
         success: function(response) {
             userObj=response;
+            if (userObj.permission_json!=null) {
+                try {
+                    let userJSON = JSON.parse(userObj.permission_json);
+                    if (userJSON.role_add) {
+                        $("div.footer").append(`<input type="button" value="Add Role" id="roleAdd" class="footerBtn">`);
+                        $("#roleAdd").click( e=> {
+                            roleAddPrompt();
+                        });
+                    }
+                } catch( e ) {
+                    console.log("Invalid user JSON");
+                }
+            }
         }
     });
 });
