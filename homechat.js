@@ -57,12 +57,11 @@ var addChannelModal = `
                 <input type="checkbox" id="privX" checked>
             </label>
         </p>
-        <br>
-        <div class="slidecontainer">
-            <label for="slider_sent" id="label_sent">Minimum Sentiment (Negative-Positive):
-                <br>
-                <input type="range" min="-1" max="1" value="-1" class="slider" step="0.01" id="slider_sent">
-            </label>
+      
+        <div class="radiocontainer">
+            <input type="radio" name="filter" id="chpositive" value="0" checked/>Positive Channel<br>
+			<input type="radio" name="filter" id="chgeneral" value="-.5"/>General Channel<br>
+			<input type="radio" name="filter" id="chnone" value="-1"/>No-Filter Channel
         </div>
         <input type="button" id="addChaSubmit" value="Submit">
     </form>

@@ -368,6 +368,11 @@ input[type=text].oneline, input[type=password].oneline, textarea.oneline {
   flex-direction: column;
 }
 
+.radiocontainer {
+	align-content: center;
+	padding: inherit;
+	width: auto;
+}
 
 .textRow:hover {
   background-color: rgb(255,255,255, 0.3) !important;
