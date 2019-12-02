@@ -149,7 +149,7 @@ function formMessage(m) {
         time="Invalid Time";
     }
     let html = `
-    <div class="textRow" data-authorid="${m.owner_id}">
+    <div class="textRow" data-authorid="${m.owner_id}" data-privilege="${m.privilege || 0}" data-msg_id="${m.msg_id}">
     <span class="author" data-id="${m.owner_id}">${m.user_name}</span><span class="datetime">${time}</span><span class="message">${m.value}</span>
     </div>`;
     return html;
@@ -208,6 +208,36 @@ function processImages(imgs) {
     });
 }
 
+function makeDeletionPopup(e, el) {
+    let msgID = el.attr("data-msg_id");
+    if ( (userObj.privilege!=null && userObj.privilege>parseInt(el.attr("data-privilege"))) || (userObj.user_id!=null && userObj.user_id == parseInt(el.attr("data-authorid") ) ) ) {
+        let popup = $(`<div class="deletePopup clickPopup" style="top: ${e.pageY}px; left: ${e.pageX - 100}px;" ><input type="button" id="deletebtn" value="Delete"></div>`);
+        popup.appendTo("body");
+        popup.click(eInner => {
+            eInner.stopPropagation();
+        });
+        $("#deletebtn").click( innerE => {
+            $(".clickPopup").remove();
+            innerE.stopPropagation();
+            $.ajax({
+                type: "POST",
+                url: "delete_message.php",
+                data: {"message_id":msgID},
+                dataType: "json",
+                cache: false,
+                success: function(response) {
+                    if (response.success) {
+                        fetchMessages();
+                    } else {
+                        alert(response.error);
+                    }
+                }
+            });
+        });
+        e.stopPropagation();
+    }
+}
+
 function writeMessages(messageContainer) {
     let prepend=-1;
     let i=0;
@@ -245,6 +275,13 @@ function writeMessages(messageContainer) {
             eInner.stopPropagation();
         });
         e.stopPropagation();
+    } );
+
+    let times = children.find("span.datetime");
+    times.unbind();
+    times.click( e => { 
+        $(".clickPopup").remove();
+        makeDeletionPopup(e, $(e.target).parent());
     } );
 }
 

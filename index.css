@@ -355,6 +355,19 @@ input[type=text].oneline, input[type=password].oneline, textarea.oneline {
   flex-direction: column;
 }
 
+.deletePopup {
+  background: #000;
+  border: solid 1px #FF0080;
+  width: 100px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  flex-direction: column;
+}
+
+
 .textRow:hover {
   background-color: rgb(255,255,255, 0.3) !important;
 }
