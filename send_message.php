@@ -42,7 +42,7 @@ $owner_id=$sessUser->user_id;
 
 $min_Sentiment=$cha->minSentiment;
 $analyzer = new Analyzer();
-$vader_result = $analyzer->getSentiment($msg);
+$vader_result = $analyzer->getSentiment($msg . " " . $msg);
 $score = $vader_result["compound"];
 
 if ($min_Sentiment > $score) { //check the channel sentiment vs the message score
