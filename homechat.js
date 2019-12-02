@@ -46,6 +46,19 @@ var addChannelModal = `
     </div>
 `
 
+var editUserModal = `
+<div class="inner">
+	<h1>Edit User</h1>
+	<form>
+		<p>User Role:<br>
+		<input type="text" id="roleName" class="oneline">
+		</p>
+		<input type="button" id="editUserSubmit" value="Submit">
+	</form>
+</div>
+`
+
+
 function removeModal() {
     let modal = $(".modal").last();
     modal.remove();
@@ -239,7 +252,12 @@ function makeDeletionPopup(e, el) {
 }
 
 function populateUserPopup(popup,userData) {
-    popup.append("<p>"+JSON.stringify(userData)+"</p>");
+    //popup.append("<p>"+JSON.stringify(userData)+"</p>");
+	popup.append("<h3>"+userData.user_name+"</h3>");
+	popup.append("<p>Role:"+userData.role_name+"</p>");
+	if (userObj.privilege || 0 > userData.privilege || 0) {
+		popup.append("<input type='button' value='Edit User'>");
+	}
 }
 
 function writeMessages(messageContainer) {
