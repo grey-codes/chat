@@ -1,6 +1,8 @@
 <?php
 
 //use voku\helper\AntiXSS;
+use Sentiment\Analyzer;
+
 
 include("shared.php");
 header('Content-Type: application/json');
@@ -35,6 +37,18 @@ if (!($rwx->w)) { //if we can't read it, fail
 
 $chid_safe=$cha->channel_id;
 $owner_id=$sessUser->user_id;
+
+
+
+$min_Sentiment=$cha->minSentiment;
+$analyzer = new Analyzer();
+$vader_result = $analyzer->getSentiment($msg);
+$score = $vader_result["compound"];
+
+if ($min_Sentiment > $score) { //check the channel sentiment vs the message score
+     die("{\"success\":false,\"error\":\"Message does not follow channel rules.\"}");
+}
+
 
 $Parsedown = new Parsedown();
 $Parsedown->setSafeMode(true);
