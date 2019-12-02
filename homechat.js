@@ -1,4 +1,4 @@
-var csrfToken = $("html").attr("csrfToken");
+var csrfToken = $("meta[name=csrf-token]").attr("content");
 
 UPDATE_TIME_MS=5000;
 var tid = setTimeout(refresh, UPDATE_TIME_MS);
@@ -190,6 +190,10 @@ function channelPrompt() {
         });
         removeModal();
     });
+    $("div.modal").last().find("form").submit(e => {
+        $("#addChaSubmit").trigger( "click" );
+        e.preventDefault();
+    });
 }
 
 function editUser(e, userData) {
@@ -208,6 +212,10 @@ function editUser(e, userData) {
 		});
 		removeModal();
 	});
+    $("div.modal").last().find("form").submit(e => {
+        $("#editUserSubmit").trigger( "click" );
+        e.preventDefault();
+    });
 }
 		
 
@@ -233,6 +241,10 @@ function roleAddPrompt() {
             }
         });
         removeModal();
+    });
+    $("div.modal").last().find("form").submit(e => {
+        $("#mkRoleBtn").trigger( "click" );
+        e.preventDefault();
     });
 }
 
@@ -547,7 +559,7 @@ var shiftHeld=false;
 $(document).on('keyup keydown', function(e){shiftHeld = e.shiftKey} );
 
 $(document).ready(function() {
-    csrfToken = $("html").attr("csrfToken");
+    csrfToken = $("meta[name=csrf-token]").attr("content");
     $("#send").click(function() {
         sendMessage();
     });
