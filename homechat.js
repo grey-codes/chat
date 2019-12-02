@@ -17,34 +17,81 @@ var addChannelModal = `
 <div class="inner">
     <h1>Create Channel</h1>
     <form>
-        <p>Channel Name:<br>
-        <input type="text" id="chanName" class="oneline">
+        <p>Channel Name:
+            <br>
+            <input type="text" id="chanName" class="oneline">
         </p>
-        <p>Public Access:<br>
-            <label class="checkbox">Read: <input type="checkbox" id="pubR" checked></label>
-            <label class="checkbox">Write: <input type="checkbox" id="pubW" checked></label>
-            <label class="checkbox">Execute: <input type="checkbox" id="pubX" checked></label>
+        <p>Public Access:
+            <br>
+            <label class="checkbox">Read:
+                <input type="checkbox" id="pubR" checked>
+            </label>
+            <label class="checkbox">Write:
+                <input type="checkbox" id="pubW" checked>
+            </label>
+            <label class="checkbox">Execute:
+                <input type="checkbox" id="pubX" checked>
+            </label>
         </p>
-        <p>Group Access:<br>
-            <label class="checkbox"><span>Read: </span><input type="checkbox" id="groupR" checked></label>
-            <label class="checkbox">Write: <input type="checkbox" id="groupW" checked></label>
-            <label class="checkbox">Execute: <input type="checkbox" id="groupX" checked></label>
+        <p>Group Access:
+            <br>
+            <label class="checkbox"><span>Read: </span>
+                <input type="checkbox" id="groupR" checked>
+            </label>
+            <label class="checkbox">Write:
+                <input type="checkbox" id="groupW" checked>
+            </label>
+            <label class="checkbox">Execute:
+                <input type="checkbox" id="groupX" checked>
+            </label>
         </p>
-        <p>Private Access:<br>
-            <label class="checkbox">Read: <input type="checkbox" id="privR" checked></label>
-            <label class="checkbox">Write: <input type="checkbox" id="privW" checked></label>
-            <label class="checkbox">Execute: <input type="checkbox" id="privX" checked></label>
+        <p>Private Access:
+            <br>
+            <label class="checkbox">Read:
+                <input type="checkbox" id="privR" checked>
+            </label>
+            <label class="checkbox">Write:
+                <input type="checkbox" id="privW" checked>
+            </label>
+            <label class="checkbox">Execute:
+                <input type="checkbox" id="privX" checked>
+            </label>
         </p>
         <br>
         <div class="slidecontainer">
-        <label for="slider_sent" id="label_sent">Minimum Sentiment (Negative-Positive):
-        <br><input type="range" min="-1" max="1" value="-1" class="slider" step="0.01" id="slider_sent">
-        </label>
+            <label for="slider_sent" id="label_sent">Minimum Sentiment (Negative-Positive):
+                <br>
+                <input type="range" min="-1" max="1" value="-1" class="slider" step="0.01" id="slider_sent">
+            </label>
         </div>
         <input type="button" id="addChaSubmit" value="Submit">
     </form>
-    </div>
+</div>
 `
+
+var addRoleModal = `
+<div class="inner">
+    <h1>Create Role</h1>
+    <form>
+        <p>Role Name:
+            <br>
+            <input type="text" class="oneline" id="roleNameTxt" style="width:20vmin;">
+        </p>
+        <p>Role Privilege:
+            <br>
+            <input type="text" class="oneline" id="rolePrivTxt" style="width:5vmin;">
+        </p>
+        <p>
+            Make Roles:
+            <br>
+            <br>
+            <label class="checkbox">
+                <input type="checkbox" id="mkRoles">
+            </label>
+        </p>
+        <input type="button" value="Create" id = "mkRoleBtn" >
+    </form>
+</div>`
 
 function removeModal() {
     let modal = $(".modal").last();
@@ -124,6 +171,31 @@ function channelPrompt() {
             fetchChannels();
             if (!data.success) {
                 alert(data.error);
+            }
+        });
+        removeModal();
+    });
+}
+
+function roleAddPrompt() {
+    makeModal(addRoleModal);
+    $("#mkRoleBtn").click( e=> {
+        e.stopPropagation();
+        let roleName=$("#roleNameTxt").val();
+        let rolePriv=$("#rolePrivTxt").val();
+        let allowMakeMoreRoles = $("#mkRoles").is(":checked");
+        let rolePrivNum = parseInt(rolePriv);
+        let perms = { "role_add": allowMakeMoreRoles };
+        /*
+        console.log("Role Name: " + roleName);
+        console.log("Role Priv Num: " + rolePrivNum);
+        console.log("Role Recursion: " + allowMakeMoreRoles);
+        */
+        $.post( "add_role.php", { "role_name": roleName, "privilege": rolePrivNum, "permission_json":JSON.stringify(perms) } ).done(function( data ) {
+            if (!data.success) {
+                alert(data.error);
+            } else {
+                alert("Made Role");
             }
         });
         removeModal();
