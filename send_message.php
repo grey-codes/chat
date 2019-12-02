@@ -39,20 +39,19 @@ $chid_safe=$cha->channel_id;
 $owner_id=$sessUser->user_id;
 
 
+$Parsedown = new Parsedown();
+$Parsedown->setSafeMode(true);
+$msg_markdown=$Parsedown->text($msg);
 
 $min_Sentiment=$cha->minSentiment;
 $analyzer = new Analyzer();
-$vader_result = $analyzer->getSentiment($msg . " " . $msg);
+$msgClean = strip_tags($msg_markdown);
+$vader_result = $analyzer->getSentiment($msgClean . " " . $msgClean);
 $score = $vader_result["compound"];
 
 if ($min_Sentiment > $score) { //check the channel sentiment vs the message score
      die("{\"success\":false,\"error\":\"Message does not follow channel rules.\"}");
 }
-
-
-$Parsedown = new Parsedown();
-$Parsedown->setSafeMode(true);
-$msg_markdown=$Parsedown->text($msg);
 
 sendMessage($owner_id,$chid_safe,$msg_markdown);
 echo("{\"success\":true}");

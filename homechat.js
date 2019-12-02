@@ -232,6 +232,17 @@ function writeMessages(messageContainer) {
     children.removeClass("last");
     children.last().addClass("last");
     processImages(children.find("img"));
+
+    let authors = children.find("span.author");
+    authors.unbind();
+    authors.click( e => { 
+        let popup = $(`<div class="authorPopup" style="top: ${e.pageX}px; left: ${e.pageY}px;" ></div>`);
+        popup.appendTo("body");
+        popup.click(eInner => {
+            eInner.stopPropagation();
+        });
+        e.preventDefault();
+    } );
 }
 
 function purgeMessages(container,purgeAr) {
