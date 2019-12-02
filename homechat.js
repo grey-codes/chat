@@ -236,12 +236,13 @@ function writeMessages(messageContainer) {
     let authors = children.find("span.author");
     authors.unbind();
     authors.click( e => { 
-        let popup = $(`<div class="authorPopup" style="top: ${e.pageX}px; left: ${e.pageY}px;" ></div>`);
+        $(".clickPopup").remove();
+        let popup = $(`<div class="authorPopup clickPopup" style="top: ${e.pageY}px; left: ${e.pageX}px;" ></div>`);
         popup.appendTo("body");
         popup.click(eInner => {
             eInner.stopPropagation();
         });
-        e.preventDefault();
+        e.stopPropagation();
     } );
 }
 
@@ -433,6 +434,10 @@ $(document).ready(function() {
             let img = $(el);
             fixImageHeight(img);
         });
+    });
+
+    $("body").click( e=> {
+        $(".clickPopup").remove();
     });
 
     $.ajax({

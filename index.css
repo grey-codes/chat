@@ -339,11 +339,13 @@ input[type=text].oneline, input[type=password].oneline, textarea.oneline {
   padding: 0.5rem;
 }
 
-.authorPopup {
+.clickPopup {
   position: absolute;
-  width: 30vmin;
+}
 
+.authorPopup {
   background: #000;
+  border: solid 1px #FF0080;
 
   display: flex;
   justify-content: center;
