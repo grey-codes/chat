@@ -3,6 +3,8 @@
         "j0sh0nat0r/simple-cache": "^0.0.4",
         "erusev/parsedown": "^1.7",
         "voku/anti-xss": "^4.1",
-	"davmixcool/php-sentiment-analyzer":"^1.0"
+        "davmixcool/php-sentiment-analyzer":"^1.0",
+        "mofodojodino/profanity-filter": "*",
+        "snipe/banbuilder": "dev-master"
     }
 }
