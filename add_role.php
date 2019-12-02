@@ -29,28 +29,43 @@ if ( is_null($sessUser->permission_json) )  {
     die("{\"success\":false,\"error\":\"no permissions\"}");
 }
 
-$userPerms = json_decode($sessUser->permission_json);
+try {
+    $userPerms = json_decode($sessUser->permission_json);
 
-if ( !property_exists($userPerms,"role_add") ) {
-    die("{\"success\":false,\"error\":\"no permissions\"}");
+    if ( !property_exists($userPerms,"role_add") ) {
+        die("{\"success\":false,\"error\":\"no permissions\"}");
+    }
+
+    if ( !$userPerms->role_add ) {
+        die("{\"success\":false,\"error\":\"no permissions\"}");
+    }
+
+    if ( $sessUser->privilege <= $privilege ) {
+        die("{\"success\":false,\"error\":\"can't make rank at higher or equal privilege\"}");
+    }
+} catch (Exception $e) {
+    die("{\"success\":false,\"error\":\"rank has invalid permissions\"}");
 }
 
-if ( !$userPerms->role_add ) {
-    die("{\"success\":false,\"error\":\"no permissions\"}");
+try {
+    $testPerms = json_decode($permStr);
+} catch (Exception $e) {
+    die("{\"success\":false,\"error\":\"new rank has invalid permissions\"}");
 }
 
-if ( $sessUser->privilege <= $privilege ) {
-    die("{\"success\":false,\"error\":\"can't make rank at higher or equal privilege\"}");
+$permObj = json_decode($permStr);
+if (property_exists($permObj,"role_add") && property_exists($userPerms,"role_add")) {
+    $permObj->role_add = $permObj->role_add && $userPerms->role_add;
 }
 
-/*
+
 $role=getRoleByName($rolename);
 if (!is_null($role)) { 
     die("{\"success\":false,\"error\":\"duplicate role\"}");
 }
 
-addRole($owner_id,$rolename,$octal,$sentiment);
-*/
+addRole($rolename,intval($privilege),json_encode($permObj));
+
 echo("{\"success\":true}");
 
 ?>

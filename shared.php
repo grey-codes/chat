@@ -101,6 +101,8 @@ function getPermissionContext($user, $object) {
     */
 }
 
+$roleByNameQuery = "SELECT * FROM roles WHERE role_name = ?";
+$roleAddQuery = "INSERT INTO roles (role_id, role_name, permission_json, privilege) VALUES (NULL, ?, ?, ?)";
 $usrByNameQuery = "SELECT * FROM " . $usrtb . " WHERE user_name = ?";
 $usrByIDQuery = "SELECT * FROM " . $usrtb . " WHERE user_id = ?";
 $usrRoleByIDQuery = "SELECT " . $usrtb . ".user_id," . $usrtb . ".user_name" . ", roles.* FROM " . $usrtb . " LEFT JOIN user_roles ON user_roles.user_id=" . $usrtb . ".user_id LEFT JOIN roles ON roles.role_id=user_roles.role_id WHERE users.user_id = ?";
@@ -112,6 +114,8 @@ $msgDelQuery = "DELETE FROM " . $msgtb . " WHERE msg_id = ?";
 $msgRegDelQuery = "INSERT INTO " . $msgtb . "_deleted (msg_id) VALUES (?)";
 $chaAddQuery = "INSERT INTO " . $chatb . " (channel_id, name, owner_id, unixperm, minSentiment) VALUES (NULL, ?, ?, ?, ?)";
 
+$roleByNameStatement = $conn->prepare($roleByNameQuery);
+$roleAddStatement = $conn->prepare($roleAddQuery);
 $getUserByNameStatement = $conn->prepare($usrByNameQuery);
 $getUserByIDStatement = $conn->prepare($usrByIDQuery);
 $usrRoleByIDStatement = $conn->prepare($usrRoleByIDQuery);
@@ -122,6 +126,28 @@ $msgSendStatement = $conn->prepare($msgSendQuery);
 $msgDelStatement= $conn->prepare($msgDelQuery);
 $msgRegDelStatement= $conn->prepare($msgRegDelQuery);
 $chaAddStatement = $conn->prepare($chaAddQuery);
+
+function addRole($roleName,$priv,$perms) {
+    global $roleAddStatement;
+    global $conn;
+    //$msg_safe = htmlspecialchars($msg);
+    $roleAddStatement->bind_param("ssi", $roleName, $perms, $priv);
+    $roleAddStatement->execute();
+    $result = $roleAddStatement->get_result();
+    //$resultobj = $resultobj->fetch_object();
+    return $result;
+}
+
+function getRoleByName($rn) {
+    global $roleByNameStatement;
+    global $conn;
+    $saferole_name = mysqli_real_escape_string($conn,$rn);
+    $roleByNameStatement->bind_param("s", $saferole_name);
+    $roleByNameStatement->execute();
+    $result = $roleByNameStatement->get_result();
+    $user = $result->fetch_object();
+    return $user;
+}
 
 function getUserRoleByID($uid) {
     global $usrRoleByIDStatement;

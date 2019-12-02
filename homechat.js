@@ -207,6 +207,7 @@ function roleAddPrompt() {
         $.post( "add_role.php", { "role_name": roleName, "privilege": rolePrivNum, "permission_json":JSON.stringify(perms) } ).done(function( data ) {
             if (!data.success) {
                 alert(data.error);
+                console.log(data.error);
             } else {
                 alert("Made Role");
             }
