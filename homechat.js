@@ -616,6 +616,7 @@ $(document).ready(function() {
             if (userObj.permission_json!=null) {
                 try {
                     let userJSON = JSON.parse(userObj.permission_json);
+                    userObj.permissions = userJSON;
                     if (userJSON.role_add) {
                         $("div.footer").append(`<input type="button" value="Add Role" id="roleAdd" class="footerBtn">`);
                         $("#roleAdd").click( e=> {
