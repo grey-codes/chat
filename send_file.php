@@ -34,8 +34,6 @@ if (!isset($_FILES["myfile"])) {
     die("{\"success\":false,\"error\":\"no file attached\"}");
 }
 
-$fileExtensions = ['jpeg','jpg','png'];
-
 $fileName = $_FILES['myfile']['name'];
 $fileSize = $_FILES['myfile']['size'];
 $fileTmpName  = $_FILES['myfile']['tmp_name'];
@@ -52,7 +50,7 @@ $tmp=explode('.',$fileName);
 $fileExt = strtolower(end($tmp));
 
 if (isset($fileName)) {
-    if (!in_array($fileExt,$fileExtensions)) {
+    if (!@is_array(getimagesize($fileTmpName))) {
         die("{\"success\":false,\"error\":\"file type not supported\"}");
     }
     $imgPath=$PREFIX_UPLOADS . $owner_id . "/" . $fileHash . "." . $fileExt;

@@ -2,13 +2,14 @@
 include('shared.php');
 ?>
 <!DOCTYPE html>
-<html lang="en" csrfToken="<?php echo($_SESSION["csrfToken"]); ?>" >
+<html lang="en">
 	<head>
 		<title>SEMO Chat</title>
         <link rel="stylesheet" href="index.css">
         <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
 		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta content="<?php echo($_SESSION["csrfToken"]); ?>" name="csrf-token" />
 	</head>
     <body>
     <div class="outerContainer">
