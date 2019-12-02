@@ -42,5 +42,23 @@ if ( $myPriv <= $roleObj -> privilege ) {
     die("{\"success\":false,\"error\":\"desired role is equal or higher rank\"}");
 }
 
+$existsQuery = "SELECT * FROM user_roles WHERE user_id = ?";
+$existsStmt = $conn->prepare($existsQuery);
+$existsStmt->bind_param("i", $target_user_id);
+$existsStmt->execute();
+$existsRes = $existsStmt->get_result();
+
+if ( !is_null( $existsRes->fetch_object() ) ) {
+    $updateQuery = "UPDATE user_roles SET role_id = ? WHERE user_id = ?";
+    $updateStmt = $conn->prepare($updateQuery);
+    $updateStmt->bind_param("ii", $roleObj->role_id, $target_user_id);
+    $updateStmt->execute();
+} else {
+    $insertQuery = "INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)";
+    $insertStmt = $conn->prepare($insertQuery);
+    $insertStmt->bind_param("ii", $target_user_id, $roleObj->role_id);
+    $insertStmt->execute();
+}
+
 echo("{\"success\":true}");
 ?>
