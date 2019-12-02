@@ -133,6 +133,8 @@ function channelPrompt() {
 function channelAddClick() {
     $(".channelBar .textRow").click(function() {
         $("#messages").attr("channel_id",$(this).attr("channel_id"));
+        $(".channelBar .textRow").removeClass("active");
+        $(this).addClass("active");
         fetchMessages(true);
     });
     $(".channelBar .textRow").last().unbind();

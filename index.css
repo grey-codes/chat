@@ -354,6 +354,14 @@ input[type=text].oneline, input[type=password].oneline, textarea.oneline {
   flex-direction: column;
 }
 
+.textRow:hover {
+  background-color: rgb(255,255,255, 0.3);
+}
+
+.textRow.active {
+  background-color: rgb(255,255,255, 0.1);
+}
+
 /* Change styles for span and cancel button on extra small screens */
 @media screen and (min-aspect-ratio: 120/80) {
   .container {
