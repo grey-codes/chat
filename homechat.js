@@ -238,6 +238,10 @@ function makeDeletionPopup(e, el) {
     }
 }
 
+function populateUserPopup(popup,userData) {
+    popup.append("<p>"+JSON.stringify(userData)+"</p>");
+}
+
 function writeMessages(messageContainer) {
     let prepend=-1;
     let i=0;
@@ -271,6 +275,12 @@ function writeMessages(messageContainer) {
         $(".clickPopup").remove();
         let popup = $(`<div class="authorPopup clickPopup" style="top: ${e.pageY}px; left: ${e.pageX}px;" ></div>`);
         popup.appendTo("body");
+        
+        let usrID=$(e.target).parent().attr("data-authorid");
+        $.post( "fetch_user_obj.php", {user_id:usrID} ).done(function( userData ) {
+            populateUserPopup(popup,userData);
+        });
+
         popup.click(eInner => {
             eInner.stopPropagation();
         });
