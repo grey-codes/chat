@@ -103,7 +103,7 @@ function getPermissionContext($user, $object) {
 
 $usrByNameQuery = "SELECT * FROM " . $usrtb . " WHERE user_name = ?";
 $usrByIDQuery = "SELECT * FROM " . $usrtb . " WHERE user_id = ?";
-$usrRoleByIDQuery = "SELECT " . $usrtb . ".*, roles.* FROM " . $usrtb . " LEFT JOIN user_roles ON user_roles.user_id=" . $usrtb . ".user_id LEFT JOIN roles ON roles.role_id=user_roles.role_id WHERE users.user_id = ?";
+$usrRoleByIDQuery = "SELECT " . $usrtb . ".user_id," . $usrtb . ".user_name" . ", roles.* FROM " . $usrtb . " LEFT JOIN user_roles ON user_roles.user_id=" . $usrtb . ".user_id LEFT JOIN roles ON roles.role_id=user_roles.role_id WHERE users.user_id = ?";
 $chaByIDQuery = "SELECT * FROM " . $chatb . " WHERE channel_id = ?";
 $chaByNameQuery = "SELECT * FROM " . $chatb . " WHERE name = ?";
 $usrRegisterQuery = "INSERT INTO " . $usrtb . " (user_id, user_name, pass_hash) VALUES (NULL, ?, ?)";

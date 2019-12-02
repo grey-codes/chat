@@ -35,7 +35,7 @@ if (!($rwx->r)) { //if we can't read it, fail
     die(json_encode(array()));
 }
 
-$msgQuery = "SELECT * FROM (SELECT msg_id, user_name, value, dateCreated FROM messages INNER JOIN users ON messages.owner_id=users.user_id WHERE messages.channel_id=? ORDER BY msg_id DESC LIMIT ? OFFSET ? ) AS msgT ORDER BY msg_id ASC";
+$msgQuery = "SELECT * FROM (SELECT messages.*,users.user_name,roles.privilege FROM messages INNER JOIN users ON messages.owner_id=users.user_id LEFT JOIN user_roles ON user_roles.user_id=users.user_id LEFT JOIN roles ON roles.role_id=user_roles.role_id WHERE messages.channel_id=? ORDER BY msg_id DESC LIMIT ? OFFSET ? ) AS msgT ORDER BY msg_id ASC";
 $msgStatement = $conn->prepare($msgQuery);
 $msgStatement->bind_param("iii", $chid,$msgCount,$msgOffset);
 $msgStatement->execute();

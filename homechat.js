@@ -3,6 +3,8 @@ var tid = setTimeout(refresh, UPDATE_TIME_MS);
 var messageAr = [];
 const MESSAGE_QUERY_MAX=25;
 
+var userObj;
+
 var addChannelHTML = `
 <div class="textRow addButton">
 <span class="channelName" id="addChannel">
@@ -134,19 +136,7 @@ function channelAddClick() {
         fetchMessages(true);
     });
     $(".channelBar .textRow").last().unbind();
-    $("#addChannel").click( channelPrompt );/*function() {
-        let channelName=prompt("Enter the channel name:");
-        let perm = prompt("Enter the three-digit octal permission.","777");
-        numVal = parseInt(perm,8);
-        if (numVal && numVal>=0 && numVal<512) {
-          $.post( "add_channel.php", { "channel_name": channelName, "octal": numVal } ).done(function( data ) {
-            fetchChannels();
-            if (data!="") {
-                alert(data);
-            }
-          });
-        }
-    })*/
+    $("#addChannel").click( channelPrompt );
 }
 
 function formMessage(m) {
@@ -157,8 +147,8 @@ function formMessage(m) {
         time="Invalid Time";
     }
     let html = `
-    <div class="textRow">
-    <span class="author">${m.user_name}</span><span class="datetime">${time}</span><span class="message">${m.value}</span>
+    <div class="textRow" data-authorid="${m.owner_id}">
+    <span class="author" data-id="${m.owner_id}">${m.user_name}</span><span class="datetime">${time}</span><span class="message">${m.value}</span>
     </div>`;
     return html;
 }
@@ -289,14 +279,6 @@ function fetchMessages(purge, off) {
                         }
                     });
                 }
-                /*
-                $( "#messages" ).html(response).ready(function(){
-                messages = $('messages'); // your parent ul element
-                messages.children().each(function(i,msgEl){messages.prepend(msgEl)})
-                if (oldHTML!=$("#messages").html() && messageOffset==0) {
-                    $("#messages").animate({ scrollTop: $('#messages').prop("scrollHeight")}, 1000);
-                }});
-                */
             }
           });
     }
@@ -440,5 +422,16 @@ $(document).ready(function() {
             let img = $(el);
             fixImageHeight(img);
         });
+    });
+
+    $.ajax({
+        type: "POST",
+        url: "fetch_user_obj.php",
+        data: {},
+        dataType: "json",
+        cache: false,
+        success: function(response) {
+            userObj=response;
+        }
     });
 });
