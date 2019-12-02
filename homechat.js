@@ -178,7 +178,8 @@ function channelPrompt() {
         //convert to octal
         numVal = permPrv*8*8+permGrp*8+permPub;
         //sentiment
-        sent=modalChildren.find("#slider_sent").val();
+        
+        sent = modalChildren.find("input[name='filter']:checked").val();
         $.post( "add_channel.php", { "channel_name": channelName, "octal": numVal, "sentiment":sent } ).done(function( data ) {
             fetchChannels();
             if (!data.success) {
