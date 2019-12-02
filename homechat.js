@@ -139,7 +139,9 @@ function channelPrompt() {
     makeModal(addChannelModal);
     $("#addChaSubmit").click( e=> {
         e.stopPropagation();
-        let channelName=$("#chanName").val();
+		//trim raw input for white space
+		let rawChannelName=$("#chanName").val();
+        let channelName=$.trim(rawChannelName);
         //init vars
         let permPub = 0;
         let permGrp = 0
