@@ -190,6 +190,25 @@ function channelPrompt() {
     });
 }
 
+function editUser(e, userData) {
+	makeModal(editUserModal);
+	$("#editUserSubmit").click( e=> {
+		e.stopPropagation();
+		let usrRole=$("#roleName").val();
+		let usrID=userData.user_id;
+
+		$.post( "edit_user.php", { "new_role": usrRole, "usr_id": usrID }).done(function( data ) {
+			if (!data.success) {
+				alert(data.error);
+			} else {
+				alert("Edit Successful.");
+			}
+		});
+		removeModal();
+	});
+}
+		
+
 function roleAddPrompt() {
     makeModal(addRoleModal);
     $("#mkRoleBtn").click( e=> {
@@ -207,7 +226,6 @@ function roleAddPrompt() {
         $.post( "add_role.php", { "role_name": roleName, "privilege": rolePrivNum, "permission_json":JSON.stringify(perms) } ).done(function( data ) {
             if (!data.success) {
                 alert(data.error);
-                console.log(data.error);
             } else {
                 alert("Made Role");
             }
@@ -327,13 +345,15 @@ function makeDeletionPopup(e, el) {
 function populateUserPopup(popup,userData) {
     //popup.append("<p>"+JSON.stringify(userData)+"</p>");
 	popup.append("<h3>"+userData.user_name+"</h3>");
-    popup.append("<p>Role:"+userData.role_name+"</p>");
-    console.log(userData);
+    
+	if (userData.role_name != null) {
+		popup.append("<p>Role:"+userData.role_name+"</p>");
+	}
+    //console.log(userData);
 	if ((userObj.privilege || 0) > (userData.privilege || 0)) {
         popup.append("<input type='button' value='Edit User' id=\"editUsrBtn\" >");
         $("#editUsrBtn").click( e=> {
-            makeModal(editUserModal);
-            e.stopPropagation();
+            editUser(e, userData);
             $(".clickPopup").remove();
         });
 	}
@@ -607,6 +627,8 @@ $(document).ready(function() {
                     console.log("Invalid user JSON");
                 }
             }
-        }
-    });
+         }
+     });
+
+ 
 });
