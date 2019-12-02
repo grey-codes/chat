@@ -339,17 +339,8 @@ input[type=text].oneline, input[type=password].oneline, textarea.oneline {
   padding: 0.5rem;
 }
 
-.authorPopup {
-  position: absolute;
-  width: 30vmin;
-
-  background: #000;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  flex-direction: column;
+.textRow:hover {
+  background-color: rgb(255,255,255, 0.3);
 }
 
 /* Change styles for span and cancel button on extra small screens */
