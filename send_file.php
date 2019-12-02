@@ -3,6 +3,10 @@ include("shared.php");
 include("simpleimg.php");
 header('Content-Type: application/json');
 
+use Sentiment\Analyzer;
+use mofodojodino\ProfanityFilter\Check;
+use Snipe\BanBuilder\CensorWords;
+
 if (!logged_in()) {
     die("{\"success\":false,\"error\":\"not logged in\"}");
 }
@@ -88,16 +92,39 @@ if (isset($fileName)) {
         $image->resize($sz[0], $sz[1]);
         $image->save($thumbPathAbs);
 
-        $msg="<p><img data-src=\"" . $thumbPath .  "\" src=\"\" fullSrc=\"" . $imgPath . "\" width=\"" . $sz[0] . "px\" height=\"" . $sz[1] . "px\"></img></p>";
+        $totalMsg="<p><img data-src=\"" . $thumbPath .  "\" src=\"\" fullSrc=\"" . $imgPath . "\" width=\"" . $sz[0] . "px\" height=\"" . $sz[1] . "px\"></img></p>";
         
         if (isset($_POST["message"])) {
+            $msg = $_POST["message"];
+            $min_Sentiment=$cha->minSentiment;
+            if ($min_Sentiment >= $SWEAR_FILTER_MIN_SENTIMENT) {
+                $check = new Check();
+                if ($check->hasProfanity($msg) && $min_Sentiment >= $SWEAR_FILTER_CENSOR_SENTIMENT) {
+                    die("{\"success\":false,\"error\":\"Message does not follow channel rules - no profanity.\"}");
+                } else {
+                    $censor = new CensorWords;
+                    $string = $censor->censorString($msg);
+                    $msg = $string["clean"];
+                }
+            }
+
             $Parsedown = new Parsedown();
             $Parsedown->setSafeMode(true);
-            $msg_markdown=$Parsedown->text($_POST["message"]);
-            $msg = $msg . $msg_markdown;
+            $msg_markdown=$Parsedown->text($msg);
+
+            $analyzer = new Analyzer();
+            $msgClean = strip_tags($msg_markdown);
+            $vader_result = $analyzer->getSentiment($msgClean . " " . $msgClean);
+            $score = $vader_result["compound"];
+
+            if ($min_Sentiment > $score) { //check the channel sentiment vs the message score
+                die("{\"success\":false,\"error\":\"Message does not follow channel rules.\"}");
+           }
+
+            $totalMsg = $totalMsg . $msg_markdown;
         }
 
-        sendMessage($owner_id,$chid_safe,$msg);
+        sendMessage($owner_id,$chid_safe,$totalMsg);
         echo("{\"success\":true}");
     }
 }
