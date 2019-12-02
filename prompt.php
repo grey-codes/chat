@@ -4,6 +4,8 @@
 		
 			<label for ="passwd"><b>Password</b></label>
 			<input type="password" placeholder="Enter Password (3-128 characters, 1+ number, 1+ special)" name="password" autocomplete="off" minlength="3" maxlength="128" required/>
+
+			<input type="hidden" value="<?php echo($_SESSION["csrfToken"]); ?>" name="csrfToken">
 		
 			<input type="submit" formaction="login.php" value="Log in">
 			<input type="submit" formaction="register.php" value="Sign up">

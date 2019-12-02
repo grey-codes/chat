@@ -12,7 +12,7 @@ session_destroy(); // Is Used To Destroy All Sessions
 		<meta name="viewport" content="width=device-width, initial-scale=1">
       <script type="text/javascript">
       setTimeout(function () {
-         window.location.href = "/chat/";
+        window.location.href = "index.php";
       }, 2000);
       </script>
 	</head>

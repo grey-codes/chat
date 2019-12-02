@@ -1,5 +1,7 @@
 <?php
 include('shared.php');
+
+dieCSRF();
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -6,6 +6,8 @@ if (!logged_in()) {
     die("{\"success\":false,\"error\":\"not logged in\"}");
 }
 
+dieCSRF();
+
 $userID = $_SESSION['user_id'];
 $username = $_SESSION['user_name'];
 $sessUser = getUserRoleByID($userID);

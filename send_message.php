@@ -5,15 +5,14 @@ use Sentiment\Analyzer;
 use mofodojodino\ProfanityFilter\Check;
 use Snipe\BanBuilder\CensorWords;
 
-$SWEAR_FILTER_MIN_SENTIMENT = -0.5;
-$SWEAR_FILTER_CENSOR_SENTIMENT = 0;
-
 include("shared.php");
 header('Content-Type: application/json');
 
 if (!logged_in()) {
     die("{\"success\":false,\"error\":\"not logged in\"}");
 }
+
+dieCSRF();
 
 $userID = $_SESSION['user_id'];
 $username = $_SESSION['user_name'];

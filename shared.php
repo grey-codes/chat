@@ -8,6 +8,22 @@ error_reporting(E_ALL);
 
 session_start(); 
 
+if ( !array_key_exists('csrfToken',$_SESSION) ) {
+    $_SESSION["csrfToken"]=sha1(rand());
+}
+
+function dieCSRF() {
+    if (!array_key_exists('csrfToken',$_SESSION)) {
+        die("{\"success\":false,\"error\":\"csrf token not initialized (sv)\"}");
+    }
+    if (!array_key_exists('csrfToken',$_POST)) {
+        die("{\"success\":false,\"error\":\"csrf token not posted\"}");
+    }
+    if ( $_POST["csrfToken"] != $_SESSION["csrfToken"] ) {
+        die("{\"success\":false,\"error\":\"csrf token invalid!\"}");
+    }
+}
+
 include('config.php');
 /*
 $dbhost = 'localhost:3306';
@@ -18,6 +34,9 @@ $dbpass = 'asda';
 
 $PREFIX_UPLOADS="uploads/";
 $PREFIX_THUMBNAILS="thumbs/";
+
+$SWEAR_FILTER_MIN_SENTIMENT = -0.5;
+$SWEAR_FILTER_CENSOR_SENTIMENT = 0;
 
 $usrtb="users";
 $chatb="channels";

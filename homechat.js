@@ -1,3 +1,5 @@
+var csrfToken = $("html").attr("csrfToken");
+
 UPDATE_TIME_MS=5000;
 var tid = setTimeout(refresh, UPDATE_TIME_MS);
 var messageAr = [];
@@ -180,7 +182,7 @@ function channelPrompt() {
         //sentiment
         
         sent = modalChildren.find("input[name='filter']:checked").val();
-        $.post( "add_channel.php", { "channel_name": channelName, "octal": numVal, "sentiment":sent } ).done(function( data ) {
+        $.post( "add_channel.php", { "channel_name": channelName, "octal": numVal, "sentiment":sent, "csrfToken": csrfToken } ).done(function( data ) {
             fetchChannels();
             if (!data.success) {
                 alert(data.error);
@@ -197,7 +199,7 @@ function editUser(e, userData) {
 		let usrRole=$("#roleName").val();
 		let usrID=userData.user_id;
 
-		$.post( "edit_user.php", { "new_role": usrRole, "usr_id": usrID }).done(function( data ) {
+		$.post( "edit_user.php", { "new_role": usrRole, "usr_id": usrID, "csrfToken": csrfToken }).done(function( data ) {
 			if (!data.success) {
 				alert(data.error);
 			} else {
@@ -223,7 +225,7 @@ function roleAddPrompt() {
         console.log("Role Priv Num: " + rolePrivNum);
         console.log("Role Recursion: " + allowMakeMoreRoles);
         */
-        $.post( "add_role.php", { "role_name": roleName, "privilege": rolePrivNum, "permission_json":JSON.stringify(perms) } ).done(function( data ) {
+        $.post( "add_role.php", { "role_name": roleName, "privilege": rolePrivNum, "permission_json":JSON.stringify(perms), "csrfToken": csrfToken } ).done(function( data ) {
             if (!data.success) {
                 alert(data.error);
             } else {
@@ -326,7 +328,7 @@ function makeDeletionPopup(e, el) {
             $.ajax({
                 type: "POST",
                 url: "delete_message.php",
-                data: {"message_id":msgID},
+                data: {"message_id":msgID, "csrfToken": csrfToken},
                 dataType: "json",
                 cache: false,
                 success: function(response) {
@@ -394,7 +396,7 @@ function writeMessages(messageContainer) {
         popup.appendTo("body");
         
         let usrID=$(e.target).parent().attr("data-authorid");
-        $.post( "fetch_user_obj.php", {user_id:usrID} ).done(function( userData ) {
+        $.post( "fetch_user_obj.php", {user_id:usrID, "csrfToken": csrfToken} ).done(function( userData ) {
             populateUserPopup(popup,userData);
         });
 
@@ -449,7 +451,7 @@ function fetchMessages(purge, off) {
                     $.ajax({
                         type: "POST",
                         url: "fetch_messages_del.php",
-                        data: {},
+                        data: { "csrfToken": csrfToken},
                         dataType: "json",
                         cache: false,
                         success: function(response) {
@@ -468,6 +470,7 @@ function fetchChannels() {
         url: "fetch_channels.php",
         cache: false,
         dataType: "json",
+        data: {"csrfToken": csrfToken},
         success: function(response) {
             let chas=$( "#channels" );
             chas.html("");
@@ -491,7 +494,7 @@ function sendMessage() {
         $.ajax({
             type: "POST",
             url: "send_message.php",
-            data: {channel_id: chid, message: msg},
+            data: {channel_id: chid, message: msg, "csrfToken": csrfToken},
             cache: false,
             success: function(response) {
                 if (!response.success) {
@@ -519,6 +522,7 @@ function uploadFile() {
         fd.append("channel_id",chid);
         fd.append("myfile", files);
         fd.append("message", msg);
+        fd.append("csrfToken", csrfToken);
         $.ajax({
             type: "POST",
             url: "send_file.php",
@@ -543,6 +547,7 @@ var shiftHeld=false;
 $(document).on('keyup keydown', function(e){shiftHeld = e.shiftKey} );
 
 $(document).ready(function() {
+    csrfToken = $("html").attr("csrfToken");
     $("#send").click(function() {
         sendMessage();
     });
@@ -609,7 +614,7 @@ $(document).ready(function() {
     $.ajax({
         type: "POST",
         url: "fetch_user_obj.php",
-        data: {},
+        data: { "csrfToken": csrfToken},
         dataType: "json",
         cache: false,
         success: function(response) {

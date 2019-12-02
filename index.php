@@ -2,7 +2,7 @@
 include('shared.php');
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" csrfToken="<?php echo($_SESSION["csrfToken"]); ?>" >
 	<head>
 		<title>SEMO Chat</title>
         <link rel="stylesheet" href="index.css">
